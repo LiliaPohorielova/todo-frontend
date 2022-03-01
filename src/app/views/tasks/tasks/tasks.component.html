@@ -1,0 +1,28 @@
+
+  <div class="card">
+    <div class="card-header card-header-warning">
+      <h4 class="card-title">Task list</h4>
+      <p class="card-category">Last updated on 15th March, 2022</p>
+    </div>
+    <div class="card-body table-responsive">
+      <table class="table table-hover">
+        <thead class="text-warning">
+        <th>ID</th>
+        <th>Name</th>
+        <th>Priority</th>
+        <th>Category</th>
+        <th>Date</th>
+        </thead>
+        <tbody>
+        <tr *ngFor="let task of tasks">
+          <td>{{task.id}}</td>
+          <td>{{task.title}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+

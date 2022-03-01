@@ -12,8 +12,7 @@ export class CategoriesComponent implements OnInit {
   categories: Category[]
 
   //Dependency Injection With Constructor
-  constructor(private dataHandler: DataHandlerService) {
-  }
+  constructor(private dataHandler: DataHandlerService) {  }
 
   //Метод вызывается после создания данного Компонента;
   ngOnInit() {
