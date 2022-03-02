@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataHandlerService} from "../../service/data-handler.service";
 import {Category} from "../../model/Category";
+import {TestData} from "../../data/TestData";
 
 @Component({
   selector: 'app-categories',
@@ -16,10 +17,11 @@ export class CategoriesComponent implements OnInit {
 
   //Метод вызывается после создания данного Компонента;
   ngOnInit() {
-    this.categories = this.dataHandler.getCategories();
+    // @ts-ignore
+    this.dataHandler.categorySubject.subscribe(categories => this.categories = categories);
   }
 
   showTasksByCategory(category: Category) {
-    this.dataHandler.getTasksByCategories(category);
+    this.dataHandler.fillTasksByCategories(category);
   }
 }
