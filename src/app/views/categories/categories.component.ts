@@ -10,7 +10,9 @@ import {TestData} from "../../data/TestData";
 })
 export class CategoriesComponent implements OnInit {
   // @ts-ignore
-  categories: Category[]
+  categories: Category[];
+  // @ts-ignore
+  selectedCategory: Category;
 
   //Dependency Injection With Constructor
   constructor(private dataHandler: DataHandlerService) {  }
@@ -22,6 +24,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   showTasksByCategory(category: Category) {
+    this.selectedCategory = category;
     this.dataHandler.fillTasksByCategories(category);
   }
 }
