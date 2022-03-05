@@ -1,6 +1,8 @@
 import {CategoryDAO} from "../interfaces/CategoryDAO";
 import {Category} from "../../../model/Category";
 import { Observable } from "rxjs/internal/Observable";
+import {of} from "rxjs";
+import {TestData} from "../../TestData";
 
 export class CategoryDAOImpl implements CategoryDAO {
 
@@ -16,12 +18,12 @@ export class CategoryDAOImpl implements CategoryDAO {
 
   findAll(): Observable<Category[]> {
     // @ts-ignore
-    return undefined;
+    return of(TestData.categories);
   }
 
   findById(id: number): Observable<Category> {
     // @ts-ignore
-    return undefined;
+    return of(TestData.categories.find(cat => cat.id === id));
   }
 
   search(title: string): Observable<Category[]> {
@@ -33,5 +35,4 @@ export class CategoryDAOImpl implements CategoryDAO {
     // @ts-ignore
     return undefined;
   }
-
 }

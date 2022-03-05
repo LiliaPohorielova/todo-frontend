@@ -1,5 +1,5 @@
 <div class="wrapper ">
-  <app-categories></app-categories>
+  <app-categories [categories]="categories"></app-categories>
   <div class="main-panel">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
@@ -139,7 +139,7 @@
           </div>
         </div>
         <div class="row-12">
-          <app-tasks></app-tasks>
+          <app-tasks [tasks]="tasks"></app-tasks>
         </div>
       </div>
     </div>

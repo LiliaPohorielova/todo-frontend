@@ -4,35 +4,37 @@ import {Task} from "../model/Task";
 import {TestData} from "../data/TestData";
 import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {TaskDAOImpl} from "../data/data/impl/TaskDAOImpl";
+import {CategoryDAOImpl} from "../data/data/impl/CategoryDAOImpl";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataHandlerService {
 
-  // @ts-ignore
   taskSubject = new BehaviorSubject<Task[]>(TestData.tasks);
-  // @ts-ignore
   categorySubject = new BehaviorSubject<Category[]>(TestData.categories);
   private taskDao = new TaskDAOImpl();
+  private categoryDao = new CategoryDAOImpl();
 
   constructor() {
     this.fillTasks();
   }
 
   fillTasks() {
-    // @ts-ignore
     this.taskSubject.next(TestData.tasks);
   }
 
   fillTasksByCategories(category: Category) {
     const tasks = TestData.tasks.filter(task => task.category === category);
-    // @ts-ignore
     this.taskSubject.next(tasks);
   }
 
   findAllTasks(): Observable<Task[]>{
     // @ts-ignore
     return this.taskDao.findAll();
+  }
+
+  findAllCategories(): Observable<Category[]>{
+    return this.categoryDao.findAll();
   }
 }

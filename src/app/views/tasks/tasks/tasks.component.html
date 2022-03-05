@@ -3,7 +3,7 @@
     <h4 class="card-title">Task list</h4>
     <p class="card-category">Last updated on 15th March, 2022</p>
   </div>
-  <div class="card-body table-responsive" *ngIf="tasks.length > 0">
+  <div *ngIf="tasks.length > 0" class="card-body table-responsive">
     <table [dataSource]="dataSource" mat-table matSort>
 
       <!-- Priority Color -->
@@ -33,7 +33,7 @@
       <ng-container matColumnDef="date">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Date</th>
         <td class="col-date" *matCellDef="let task" [ngClass]="{'completed': task.completed, 'novalue': task.date == null}" mat-cell>
-          {{task.date ? (task.date | date : 'short') : "Без даты"}}
+          {{task.date ? (task.date | date: 'short') : "Без даты"}}
         </td>
       </ng-container>
 

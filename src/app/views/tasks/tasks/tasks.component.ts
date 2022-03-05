@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {DataHandlerService} from "../../../service/data-handler.service";
 import {Task} from "../../../model/Task";
 import {MatTableDataSource} from "@angular/material/table";
@@ -11,28 +11,32 @@ import {MatSort} from "@angular/material/sort";
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit, AfterViewInit {
+
   // поля таблицы (названия колонок)
-  public displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category'];
-  // @ts-ignore
-  public dataSource: MatTableDataSource<Task>; //контейнер - источник данных для таблицы
+  private _displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category'];
+  private _dataSource: MatTableDataSource<Task>; //контейнер - источник данных для таблицы
+
+  get dataSource(): MatTableDataSource<Task> {
+    return this._dataSource;
+  }
+  get displayedColumns(): string[] {
+    return this._displayedColumns;
+  }
 
   // Данные компоненты будут иметь ссылки на объекты в HTML
-  // @ts-ignore
   @ViewChild(MatPaginator, {static: false}) private paginator: MatPaginator;
-  // @ts-ignore
   @ViewChild(MatSort, {static: false}) private sort: MatSort;
 
-  // @ts-ignore
-  tasks: Task[];
+  @Input()
+  public tasks: Task[];
 
   constructor(private dataHandler: DataHandlerService) {
   }
 
   ngOnInit() {
-    // @ts-ignore
-    this.dataHandler.findAllTasks().subscribe(tasks => this.tasks = tasks);
-    this.dataSource = new MatTableDataSource();
-    this.refreshTable();
+    //this.dataHandler.findAllTasks().subscribe(tasks => this.tasks = tasks);
+    this._dataSource = new MatTableDataSource();
+    this.fillTable(); //заполняем таблицу данными и говорим ей как сортировать
   }
 
   // Метод вызывается после инициализации (сначала все данные попали в таблицу, а потом мы с ними можем работать, сортировать и тд)
@@ -56,13 +60,13 @@ export class TasksComponent implements OnInit, AfterViewInit {
   }
 
   //показывает задачи учитывая поиск, фильтр, категории
-  private refreshTable() {
-    this.dataSource.data = this.tasks; //обновить источник данных для таблицы
+  private fillTable() {
+    this._dataSource.data = this.tasks; //обновить источник данных для таблицы
     this.addTableObjects(); // добавляем визуальные объекты
 
     // объесняем сортировщику как и по чем сортировать
     // @ts-ignore: ошибка с датой (можно возвращать любой тип)
-    this.dataSource.sortingDataAccessor = (task, colName) => {
+    this._dataSource.sortingDataAccessor = (task, colName) => {
       switch (colName) {
         case 'priority': {
           return task.priority ? task.priority.id : null;
@@ -77,14 +81,12 @@ export class TasksComponent implements OnInit, AfterViewInit {
           return task.title;
         }
       }
-
     }
-
   }
 
   // Отправляем данные, с которыми нужно работать
   private addTableObjects() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this._dataSource.sort = this.sort;
+    this._dataSource.paginator = this.paginator;
   }
 }
