@@ -1,9 +1,10 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DataHandlerService} from "../../../service/data-handler.service";
 import {Task} from "../../../model/Task";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {Category} from "../../../model/Category";
 
 @Component({
   selector: 'app-tasks',
@@ -35,6 +36,9 @@ export class TasksComponent implements OnInit, AfterViewInit {
     this.tasks = tasks;
     this.fillTable();
   }
+
+  @Output()
+  updateTask = new EventEmitter<Task>();
 
   constructor(private dataHandler: DataHandlerService) {
   }
@@ -95,5 +99,9 @@ export class TasksComponent implements OnInit, AfterViewInit {
   private addTableObjects() {
     this._dataSource.sort = this.sort;
     this._dataSource.paginator = this.paginator;
+  }
+
+  onClickTask(task: any) {
+    this.updateTask.emit(task);
   }
 }

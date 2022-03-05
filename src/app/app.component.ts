@@ -29,4 +29,8 @@ export class AppComponent implements OnInit{
       this.selectedCategory, null, null, null
     ).subscribe(tasks => this.tasks = tasks); // как только данные измениться - они применяться
   }
+
+  onUpdateTask(task: Task) {
+    console.log(task);
+  }
 }
