@@ -1,6 +1,7 @@
 import {BaseDAO} from "./BaseDAO";
 import {Category} from "../../../model/Category";
 import {Priority} from "../../../model/Priority";
+import {Task} from "../../../model/Task";
 import {Observable} from "rxjs";
 
 export interface TaskDAO extends BaseDAO<Task> {

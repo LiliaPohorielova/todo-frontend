@@ -12,6 +12,7 @@ export class AppComponent implements OnInit{
   title = 'Todo';
   tasks: Task[];
   categories: Category[];
+  selectedCategory: Category;
 
   constructor(private dataHandler: DataHandlerService) {
   }
@@ -19,5 +20,13 @@ export class AppComponent implements OnInit{
   ngOnInit() {
     this.dataHandler.findAllCategories().subscribe(categories => this.categories = categories);
     this.dataHandler.findAllTasks().subscribe(tasks => this.tasks = tasks);
+  }
+
+  // Попадаем из дочернего компонента в родительский
+  onSelectCategory(category: Category) {
+    this.selectedCategory = category;
+    this.dataHandler.searchTasks(
+      this.selectedCategory, null, null, null
+    ).subscribe(tasks => this.tasks = tasks); // как только данные измениться - они применяться
   }
 }
