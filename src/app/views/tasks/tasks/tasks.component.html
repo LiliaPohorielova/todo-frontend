@@ -4,7 +4,7 @@
     <p class="card-category">Last updated on 15th March, 2022</p>
   </div>
   <div *ngIf="tasks && tasks.length > 0" class="card-body table-responsive">
-    <table [dataSource]="dataSource" mat-table matSort>
+    <table [dataSource]="getDataSource" mat-table matSort>
 
       <!-- Priority Color -->
       <ng-container matColumnDef="color">
@@ -25,7 +25,7 @@
       <ng-container matColumnDef="title">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Title</th>
         <td class="col-title pointer" *matCellDef="let task" [class.completed]="task.completed" mat-cell
-        (click)="onClickTask(task)">
+        (click)="openEditTaskDialog(task)">
           {{task.title}}
         </td>
       </ng-container>
@@ -55,9 +55,9 @@
       </ng-container>
 
       <!-- Header Of Table -->
-      <tr *matHeaderRowDef="displayedColumns; " mat-header-row></tr>
+      <tr *matHeaderRowDef="getDisplayedColumns; " mat-header-row></tr>
       <!-- Rows Of Table -->
-      <tr *matRowDef="let row; columns: displayedColumns; " mat-row></tr>
+      <tr *matRowDef="let row; columns: getDisplayedColumns; " mat-row></tr>
     </table>
     <!-- Material Table Pagination -->
     <mat-paginator [pageSizeOptions]="[10,20,50,100]" showFirstLastButtons></mat-paginator>

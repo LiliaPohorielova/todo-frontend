@@ -4,7 +4,8 @@ import {Task} from "../../../model/Task";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {Category} from "../../../model/Category";
+import { MatDialog } from '@angular/material/dialog';
+import {EditTaskDialogComponent} from "../../../dialog/edit-task-dialog/edit-task-dialog.component";
 
 @Component({
   selector: 'app-tasks',
@@ -13,21 +14,12 @@ import {Category} from "../../../model/Category";
 })
 export class TasksComponent implements OnInit, AfterViewInit {
 
-  // поля таблицы (названия колонок)
-  private _displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category'];
-  private _dataSource: MatTableDataSource<Task>; //контейнер - источник данных для таблицы
-
-  get dataSource(): MatTableDataSource<Task> {
-    return this._dataSource;
-  }
-  get displayedColumns(): string[] {
-    return this._displayedColumns;
-  }
-
   // Данные компоненты будут иметь ссылки на объекты в HTML
   @ViewChild(MatPaginator, {static: false}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) private sort: MatSort;
 
+  @Output()
+  updateTask = new EventEmitter<Task>();
   public tasks: Task[];
 
   // Передаем список задач с помощью Input на Set
@@ -37,15 +29,26 @@ export class TasksComponent implements OnInit, AfterViewInit {
     this.fillTable();
   }
 
-  @Output()
-  updateTask = new EventEmitter<Task>();
+  // Поля таблицы (названия колонок)
+  private displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category'];
+  private dataSource: MatTableDataSource<Task>; //контейнер - источник данных для таблицы
 
-  constructor(private dataHandler: DataHandlerService) {
+  get getDataSource(): MatTableDataSource<Task> {
+    return this.dataSource;
   }
+  get getDisplayedColumns(): string[] {
+    return this.displayedColumns;
+  }
+
+  // Внедрение с помощью конструктора
+  constructor(
+    private dataHandler: DataHandlerService, // Доступ к данным
+    private dialog: MatDialog // Работа с диалоговым окном
+  ) { }
 
   ngOnInit() {
     //this.dataHandler.findAllTasks().subscribe(tasks => this.tasks = tasks);
-    this._dataSource = new MatTableDataSource();
+    this.dataSource = new MatTableDataSource();
     this.fillTable(); //заполняем таблицу данными и говорим ей как сортировать
   }
 
@@ -58,8 +61,8 @@ export class TasksComponent implements OnInit, AfterViewInit {
     task.completed = !task.completed;
   }
 
-  //в зависимости от статуса - вернуть цвет
-  public getPriorityColor(task: Task) {
+  // В зависимости от статуса - вернуть цвет
+  public getPriorityColor(task: Task): string {
     if (task.completed) {
       return "#F8F9FA";
     }
@@ -69,15 +72,15 @@ export class TasksComponent implements OnInit, AfterViewInit {
     return '#fff';
   }
 
-  //показывает задачи учитывая поиск, фильтр, категории
-  private fillTable() {
-    if (!this._dataSource) return;
-    this._dataSource.data = this.tasks; //обновить источник данных для таблицы
+  // Показывает задачи учитывая поиск, фильтр, категории
+  private fillTable(): void {
+    if (!this.dataSource) return;
+    this.dataSource.data = this.tasks; //обновить источник данных для таблицы
     this.addTableObjects(); // добавляем визуальные объекты
 
-    // объесняем сортировщику как и по чем сортировать
+    // Объясняем сортировщику как и по чем сортировать
     // @ts-ignore: ошибка с датой (можно возвращать любой тип)
-    this._dataSource.sortingDataAccessor = (task, colName) => {
+    this.dataSource.sortingDataAccessor = (task, colName) => {
       switch (colName) {
         case 'priority': {
           return task.priority ? task.priority.id : null;
@@ -96,12 +99,25 @@ export class TasksComponent implements OnInit, AfterViewInit {
   }
 
   // Отправляем данные, с которыми нужно работать
-  private addTableObjects() {
-    this._dataSource.sort = this.sort;
-    this._dataSource.paginator = this.paginator;
+  private addTableObjects(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
-  onClickTask(task: any) {
-    this.updateTask.emit(task);
+  // Диалоговое окно редактирования задачи
+  openEditTaskDialog(task: Task): void {
+
+    // Открытие диалогового окна
+    // Метод оpen (передаем компонент диалогового окна и настройки, типо: название, автофокус, положение и тд)
+    const dialogRef = this.dialog.open(EditTaskDialogComponent, {data: [task, "Edit tasks"], autoFocus: false});
+    // Подписывваемся на результат (реактивный стиль Observable)
+    dialogRef.afterClosed().subscribe(result => {
+      // Обработка результата (то, что ввел пользователь)
+
+      if (result as Task) { // Если есть результат - преобразовываем его в Task
+        this.updateTask.emit(task);
+        return;
+      }
+    });
   }
 }

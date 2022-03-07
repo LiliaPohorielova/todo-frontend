@@ -1,0 +1,42 @@
+<!-- Редактирование задачи -->
+<!-- Диалоговое окно состоит из двух частей:
+     - контента (mat-dialog-content)
+     - действий-кнопок (mat-dialog-actions) -->
+<mat-dialog-content>
+
+  <!-- Заголовок диалогового окна -->
+  <h1 mat-dialog-title>{{this.getDialogTitle}}</h1>
+
+  <!-- Форма внутри диалогового окна -->
+  <mat-form-field appearance="fill">
+    <mat-label>Enter title</mat-label>
+
+    <!-- Двустронее связывание:  [(ngModel)] -->
+    <!-- Сначала отображаются данные, которые уже были -->
+    <!-- Потом считываются и сохраняются новые данные, которые пользователь ввел -->
+    <input
+      #inputTitle
+      matInput
+      required
+      placeholder="Do homework"
+      [(ngModel)]="tmpTitle"
+      (keydown.enter)="onConfirm()"> <!-- По нажатию на Enter - сохранить задачу -->
+
+    <button
+      *ngIf="tmpTitle.trim().length > 0"
+      mat-button matSuffix mat-icon-button aria-label="Clear"
+      (click)="tmpTitle= ''" class="dialog-todo-title">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    mat-raised-button color="primary"
+    (click)="onConfirm()"
+    [disabled]="inputTitle.value.trim().length == 0"> <!-- Если пустое название - кнопка сохранить неактивная! -->
+    Save
+  </button>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

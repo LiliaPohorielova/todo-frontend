@@ -29,7 +29,7 @@ export class CategoriesComponent implements OnInit {
     //this.dataHandler.findAllCategories().subscribe(categories => this.categories = categories);
   }
 
-  showTasksByCategory(category: Category) {
+  showTasksByCategory(category: Category): void {
     // Если выбрали ту же самую категорию, то выходим
     // Ничего не меняем, ибо незачем лезть в базу лишний раз
     if (this.selectedCategory === category) return;

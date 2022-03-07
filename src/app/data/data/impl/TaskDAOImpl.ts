@@ -1,4 +1,4 @@
-import { Observable, of } from "rxjs";
+import {Observable, of} from "rxjs";
 import {TaskDAO} from "../interfaces/TaskDAO";
 import {Category} from "../../../model/Category";
 import {Priority} from "../../../model/Priority";
@@ -12,7 +12,18 @@ export class TaskDAOImpl implements TaskDAO {
   }
 
   update(task: Task): Observable<Task> {
-    return undefined;
+    const taskTmp = TestData.tasks.find(t => t.id === task.id); // Ищем по id
+    /*
+       indexOf() - ищет в массиве указанный элемент и возвращает его позицию
+
+       splice() - удалить из массива/коллекции
+       - начиная с какого индекса
+       - сколько удалить
+       - чем заменить
+     */
+    TestData.tasks.splice(TestData.tasks.indexOf(taskTmp), 1, task);
+
+    return of(task); // заворачиваем в Observable
   }
 
   delete(id: number): Observable<Task> {
