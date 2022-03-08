@@ -34,7 +34,7 @@ export class EditTaskDialogComponent implements OnInit {
   tmpTitle: string; // Сохраняем новое название во временную переменную, чтобы она не отразилась на самой задаче и изменения можно было отменить
   tmpCategory: Category; // Сохраняем новую категорию
   tmpPriority: Priority; // Сохраняем новый приоритет
-
+  tmpDate: Date; // Сохраняю новую дату
 
   get getDialogTitle(): string {
     return this.dialogTitle;
@@ -48,12 +48,17 @@ export class EditTaskDialogComponent implements OnInit {
     return this.priorities;
   }
 
+  get getTask(): Task {
+    return this.task;
+  }
+
   ngOnInit(): void {
     this.task = this.data[0]; // Получаем отредактированную задачу
     this.dialogTitle = this.data[1]; //Текст для заголовка
     this.tmpTitle = this.task.title; // Отображаем то название, которое было раньше
     this.tmpCategory = this.task.category; // Категория, которая была раньше
     this.tmpPriority = this.task.priority; // Приоритет, который был раньше
+    this.tmpDate = this.task.date; // Дата, которая была раньше
 
     this.dataHandler.getAllCategories().subscribe(items => this.categories = items);
     this.dataHandler.getAllPriorities().subscribe(prior => this.priorities = prior);
@@ -64,6 +69,7 @@ export class EditTaskDialogComponent implements OnInit {
     this.task.title = this.tmpTitle; // Запоминаем новое название
     this.task.category = this.tmpCategory; // Запоминаем новую категорию
     this.task.priority = this.tmpPriority; // Запоминаем новый приоритет
+    this.task.date = this.tmpDate; // Запоминаем новую дату
     this.dialogRef.close(this.task);  // Закрываем диалоговое окно, передаем измененную задачу
   }
 
@@ -82,4 +88,15 @@ export class EditTaskDialogComponent implements OnInit {
       if (result) this.dialogRef.close('delete'); // Нажали удалить
     });
   }
+
+  // Выполняем задачу
+  complete() {
+    this.dialogRef.close('complete');
+  }
+
+  // Не выполняем задачу
+  notComplete() {
+    this.dialogRef.close('notComplete');
+  }
 }
+
