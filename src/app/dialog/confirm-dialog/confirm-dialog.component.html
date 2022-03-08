@@ -1,0 +1,21 @@
+<!-- Диалоговое окно для подтверждения -->
+
+<!-- Диалоговое окно состоит из двух частей:
+     - контента (mat-dialog-content)
+     - действий-кнопок (mat-dialog-actions) -->
+<mat-dialog-content>
+  <h1 mat-dialog-title>{{getDialogTitle}}</h1>
+  <p>{{getMessage}}</p>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    mat-raised-button
+    (click)="onConfirm()"
+    style="background-color: #9c27b0; color: white">
+    Confirm
+  </button>
+  <button mat-raised-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
+

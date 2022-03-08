@@ -20,6 +20,10 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   @Output()
   updateTask = new EventEmitter<Task>();
+
+  @Output()
+  deleteTask = new EventEmitter<Task>();
+
   public tasks: Task[];
 
   // Передаем список задач с помощью Input на Set
@@ -113,6 +117,11 @@ export class TasksComponent implements OnInit, AfterViewInit {
     // Подписывваемся на результат (реактивный стиль Observable)
     dialogRef.afterClosed().subscribe(result => {
       // Обработка результата (то, что ввел пользователь)
+
+      if (result === 'delete') {
+        this.deleteTask.emit(task);
+        return;
+      }
 
       if (result as Task) { // Если есть результат - преобразовываем его в Task
         this.updateTask.emit(task);

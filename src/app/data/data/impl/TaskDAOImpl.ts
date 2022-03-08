@@ -27,7 +27,9 @@ export class TaskDAOImpl implements TaskDAO {
   }
 
   delete(id: number): Observable<Task> {
-    return undefined;
+    const taskTmp = TestData.tasks.find(t => t.id === id);
+    TestData.tasks.splice(TestData.tasks.indexOf(taskTmp),1);
+    return of(taskTmp);
   }
 
   findAll(): Observable<Task[]> {

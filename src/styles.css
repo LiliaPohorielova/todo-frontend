@@ -20,3 +20,12 @@ body {
 .pointer {
   cursor: pointer;
 }
+
+.purple {
+  background-color: #9c27b0;
+  color: white
+}
+
+.red {
+  color: red;
+}

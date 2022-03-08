@@ -60,12 +60,23 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
+  <!-- Сохранить изменения -->
   <button
     mat-raised-button
     (click)="onConfirm()"
     [disabled]="inputTitle.value.trim().length == 0"
-    style="background-color: #9c27b0; color: white"> <!-- Если пустое название - кнопка сохранить неактивная! -->
+    class="purple"> <!-- Если пустое название - кнопка сохранить неактивная! -->
     Save
   </button>
+
+  <!-- Отменить изменения (Закрыть) -->
   <button mat-raised-button mat-dialog-close>Close</button>
+
+  <!-- Удалить задачу -->
+  <button
+    mat-button
+    (click)="delete()"
+    class="red">
+    Delete task
+  </button>
 </mat-dialog-actions>
