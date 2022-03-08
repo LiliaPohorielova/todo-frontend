@@ -34,7 +34,7 @@
       <ng-container matColumnDef="date">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Date</th>
         <td class="col-date" *matCellDef="let task" [ngClass]="{'completed': task.completed, 'novalue': task.date == null}" mat-cell>
-          {{task.date ? (task.date | date: 'short') : "Без даты"}}
+          {{task.date | taskDate}}
         </td>
       </ng-container>
 
