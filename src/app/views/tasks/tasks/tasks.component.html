@@ -54,6 +54,41 @@
         </td>
       </ng-container>
 
+      <!-- Delete/Edit Task -->
+      <ng-container matColumnDef="operations">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td class="col-operations" mat-cell *matCellDef="let task"
+            [class.completed]="task.completed">
+
+            <button mat-icon-button (click)="openDeleteDialog(task)"
+                    class="delete-icon">
+              <mat-icon aria-hidden="false">delete</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="openEditTaskDialog(task)"
+                  class="edit-icon">
+            <mat-icon aria-hidden="false">edit</mat-icon>
+            </button>
+
+        </td>
+
+      </ng-container>
+
+      <!-- CheckBox -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td class="col-select text-right" mat-cell *matCellDef="let task">
+
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? onToggleStatus(task) : null"
+            [checked]="task.comleted">
+
+          </mat-checkbox>
+        </td>
+
+      </ng-container>
+
       <!-- Header Of Table -->
       <tr *matHeaderRowDef="getDisplayedColumns; " mat-header-row></tr>
       <!-- Rows Of Table -->

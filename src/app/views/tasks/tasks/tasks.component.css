@@ -40,3 +40,25 @@
   width: 10% !important;
 }
 
+.delete-icon {
+  cursor: pointer;
+  color: #ea6561;
+  font-size: 18px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.edit-icon {
+  cursor: pointer;
+  color: #9A9A9A;
+  font-size: 18px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.mat-header-cell {
+  font-size: 1.063rem;
+  color: #9c27b0 !important;
+  font-weight: normal;
+}
+

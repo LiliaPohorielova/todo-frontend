@@ -6,6 +6,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import { MatDialog } from '@angular/material/dialog';
 import {EditTaskDialogComponent} from "../../../dialog/edit-task-dialog/edit-task-dialog.component";
+import {ConfirmDialogComponent} from "../../../dialog/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-tasks',
@@ -34,7 +35,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   }
 
   // Поля таблицы (названия колонок)
-  private displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category'];
+  private displayedColumns: string[] = ['color', 'id', 'title', 'date', 'priority', 'category', 'operations', 'select'];
   private dataSource: MatTableDataSource<Task>; //контейнер - источник данных для таблицы
 
   get getDataSource(): MatTableDataSource<Task> {
@@ -59,10 +60,6 @@ export class TasksComponent implements OnInit, AfterViewInit {
   // Метод вызывается после инициализации (сначала все данные попали в таблицу, а потом мы с ними можем работать, сортировать и тд)
   ngAfterViewInit() {
     this.addTableObjects();
-  }
-
-  toggleTaskCompleted(task: Task) {
-    task.completed = !task.completed;
   }
 
   // В зависимости от статуса - вернуть цвет
@@ -140,5 +137,26 @@ export class TasksComponent implements OnInit, AfterViewInit {
         return;
       }
     });
+  }
+
+  openDeleteDialog(task: Task) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '500px',
+      data: {
+        dialogTitle: 'Action confirmation',
+        message: 'Do you really want to delete the task:\n' +  task.title + '?'
+      },
+      autoFocus: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result)
+        this.deleteTask.emit(task); // Нажали удалить
+    });
+  }
+
+  onToggleStatus(task: Task) {
+    task.completed = !task.completed;
+    this.updateTask.emit(task);
   }
 }
