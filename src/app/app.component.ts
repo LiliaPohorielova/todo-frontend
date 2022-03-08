@@ -18,8 +18,8 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.dataHandler.findAllCategories().subscribe(categories => this.categories = categories);
-    this.dataHandler.findAllTasks().subscribe(tasks => this.tasks = tasks);
+    this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
+    this.dataHandler.getAllTasks().subscribe(tasks => this.tasks = tasks);
   }
 
   // Попадаем из дочернего компонента в родительский

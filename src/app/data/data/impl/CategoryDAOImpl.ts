@@ -17,7 +17,6 @@ export class CategoryDAOImpl implements CategoryDAO {
   }
 
   findAll(): Observable<Category[]> {
-    // @ts-ignore
     return of(TestData.categories);
   }
 
