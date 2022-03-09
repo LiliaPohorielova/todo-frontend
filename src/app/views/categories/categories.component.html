@@ -1,21 +1,47 @@
 <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
-  <!--
-    Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
-
-    Tip 2: you can also add an image using data-image tag
--->
-  <div class="logo"><a href="http://www.creative-tim.com" class="simple-text logo-normal">
-    Creative Tim
-  </a></div>
+  <div class="logo">
+    <a class="simple-text logo-normal">
+      Categories
+    </a>
+  </div>
   <div class="sidebar-wrapper">
     <ul class="nav">
-      <li class="nav-item pointer" *ngFor="let category of categories" (click)="showTasksByCategory(category)"
-          [class.active] = "category === selectedCategory"
-      >
+
+      <!-- All Categories -->
+      <li class="nav-item pointer"
+          (click)="showTasksByCategory(null)"
+          [class.active]="selectedCategory === null">
         <a class="nav-link">
-          <p>{{category.title}}</p>
+          <p>All Categories</p>
         </a>
       </li>
+
+      <!-- Line -->
+      <div class="line"></div>
+
+      <!-- Some Categories -->
+      <li class="nav-item pointer"
+          *ngFor="let category of categories; let index = index"
+          (click)="showTasksByCategory(category)"
+          [class.active]="category === selectedCategory"
+
+          (mouseleave)="showEditIcon(null)"
+          (mouseenter)="showEditIcon(index)"
+      >
+        <a class="nav-link">
+          <span class="category-title">{{category.title}}</span>
+          <span class="edit-category-icon-area">
+            <mat-icon
+              class="edit-category-icon"
+              (click)="$event.stopPropagation(); openEditDialog(category)"
+              *ngIf="indexMouseMove === index">
+              edit
+            </mat-icon>
+          </span>
+        </a>
+      </li>
+
+
     </ul>
   </div>
 </div>

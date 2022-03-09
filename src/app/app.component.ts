@@ -26,7 +26,10 @@ export class AppComponent implements OnInit{
   onSelectCategory(category: Category) {
     this.selectedCategory = category;
     this.dataHandler.searchTasks(
-      this.selectedCategory, null, null, null
+      this.selectedCategory,
+      null,
+      null,
+      null
     ).subscribe(tasks => this.tasks = tasks); // как только данные измениться - они применяться
   }
 
@@ -56,5 +59,19 @@ export class AppComponent implements OnInit{
         this.tasks = tasks;
       })
     })
+  }
+
+  onUpdateCategory(category: Category) {
+    this.dataHandler.updateCategory(category).subscribe(() => {
+      this.onSelectCategory(this.selectedCategory);
+    });
+  }
+
+  onDeleteCategory(category: Category) {
+    this.dataHandler.deleteCategory(category.id).subscribe(cat => {
+      this.selectedCategory = null; // Открываем категорию "Все"
+      this.onSelectCategory(this.selectedCategory);
+    });
+
   }
 }

@@ -7,6 +7,7 @@ import {MatSort} from "@angular/material/sort";
 import { MatDialog } from '@angular/material/dialog';
 import {EditTaskDialogComponent} from "../../../dialog/edit-task-dialog/edit-task-dialog.component";
 import {ConfirmDialogComponent} from "../../../dialog/confirm-dialog/confirm-dialog.component";
+import {Category} from "../../../model/Category";
 
 @Component({
   selector: 'app-tasks',
@@ -24,6 +25,9 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   @Output()
   deleteTask = new EventEmitter<Task>();
+
+  @Output()
+  selectCategory = new EventEmitter<Category>(); // Нажали на кегорию из общей таблицы задач
 
   public tasks: Task[];
 
@@ -158,5 +162,9 @@ export class TasksComponent implements OnInit, AfterViewInit {
   onToggleStatus(task: Task) {
     task.completed = !task.completed;
     this.updateTask.emit(task);
+  }
+
+  onSelectCategory(category: Category) {
+    this.selectCategory.emit(category);
   }
 }

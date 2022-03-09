@@ -11,9 +11,25 @@ export class CategoryDAOImpl implements CategoryDAO {
     return undefined;
   }
 
+  update(category: Category): Observable<Category> {
+    const tmpCategory = TestData.categories.find(t => t.id === category.id);
+    TestData.categories.splice(TestData.categories.indexOf(tmpCategory),1, category);
+
+    return of(tmpCategory);
+  }
+
   delete(id: number): Observable<Category> {
-    // @ts-ignore
-    return undefined;
+    // Перед удалением - ставим в задачах null
+    TestData.tasks.forEach(task => {
+      if (task.category && task.category.id === id) {
+        task.category = null;
+      }
+    });
+
+    const tmpCategory = TestData.categories.find(t => t.id === id);
+    TestData.categories.splice(TestData.categories.indexOf(tmpCategory),1);
+
+    return of(tmpCategory);
   }
 
   findAll(): Observable<Category[]> {
@@ -26,11 +42,6 @@ export class CategoryDAOImpl implements CategoryDAO {
   }
 
   search(title: string): Observable<Category[]> {
-    // @ts-ignore
-    return undefined;
-  }
-
-  update(T: Category): Observable<Category> {
     // @ts-ignore
     return undefined;
   }
