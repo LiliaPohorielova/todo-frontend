@@ -48,8 +48,22 @@ export class TaskDAOImpl implements TaskDAO {
   // Поиск задач по параметрам
   private searchTodos(category: Category, searchText: string, status: boolean, priority: Priority): Task[] {
     let allTasks = TestData.tasks;
+
+    if (status != null)
+      allTasks = allTasks.filter(task => task.completed === status);
+
     if (category != null)
       allTasks = allTasks.filter(todo => todo.category === category);
+
+    if (priority != null)
+      allTasks = allTasks.filter(task => task.priority === priority);
+
+    if (searchText != null) {
+      allTasks = allTasks.filter(
+        task => task.title.toUpperCase().includes(searchText.toUpperCase())
+      );
+    }
+
     return allTasks;
   }
 

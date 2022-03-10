@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {EditTaskDialogComponent} from "../../../dialog/edit-task-dialog/edit-task-dialog.component";
 import {ConfirmDialogComponent} from "../../../dialog/confirm-dialog/confirm-dialog.component";
 import {Category} from "../../../model/Category";
+import {Priority} from "../../../model/Priority";
 
 @Component({
   selector: 'app-tasks',
@@ -29,12 +30,33 @@ export class TasksComponent implements OnInit, AfterViewInit {
   @Output()
   selectCategory = new EventEmitter<Category>(); // Нажали на кегорию из общей таблицы задач
 
-  public tasks: Task[];
+  @Output()
+  filterByTitle = new EventEmitter<string>();
+
+  @Output()
+  filterByStatus = new EventEmitter<boolean>();
+
+  @Output()
+  filterByPriority = new EventEmitter<Priority>();
+
+  tasks: Task[];
+  priorities: Priority[];
+
+  // Поиск
+  searchTaskText: string;
+  selectedStatusFilter: boolean = null;   // по-умолчанию будут показываться все задачи
+  selectedPriorityFilter: Priority = null;
 
   // Передаем список задач с помощью Input на Set
   @Input('tasks')
   public set setTasks(tasks: Task[]) {
     this.tasks = tasks;
+    this.fillTable();
+  }
+
+  @Input('priorities')
+  public set setPriorities(priorities: Priority[]) {
+    this.priorities = priorities;
     this.fillTable();
   }
 
@@ -75,6 +97,10 @@ export class TasksComponent implements OnInit, AfterViewInit {
       return task.priority.color;
     }
     return '#fff';
+  }
+
+  get getPriorities(): Priority[] {
+    return this.priorities;
   }
 
   // Показывает задачи учитывая поиск, фильтр, категории
@@ -166,5 +192,26 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   onSelectCategory(category: Category) {
     this.selectCategory.emit(category);
+  }
+
+  // Поиск по названию
+  onFilterByTitle() {
+    this.filterByTitle.emit(this.searchTaskText);
+  }
+
+  // Фильтрация по статусу
+  onFilterByStatus(value: boolean) {
+    // На всякий случай проверяем
+    if (value != this.selectedStatusFilter) {
+      this.selectedStatusFilter = value;
+      this.filterByStatus.emit(this.selectedStatusFilter);
+    }
+  }
+
+  onFilterByPriority(priority: Priority) {
+    if (priority != this.selectedPriorityFilter) {
+      this.selectedPriorityFilter = priority;
+      this.filterByPriority.emit(this.selectedPriorityFilter);
+    }
   }
 }

@@ -61,4 +61,7 @@
   color: #9c27b0 !important;
   font-weight: normal;
 }
+.search-fields {
+  width: 250px !important;
+}
 
