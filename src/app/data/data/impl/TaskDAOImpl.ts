@@ -8,8 +8,13 @@ import {TestData} from "../../TestData";
 export class TaskDAOImpl implements TaskDAO {
 
   create(task: Task): Observable<Task> {
-    return undefined;
+    if (task.id === null || task.id === 0) {
+      task.id = this.getLastIdTask();
+    }
+    TestData.tasks.push(task);
+    return of(task);
   }
+
 
   update(task: Task): Observable<Task> {
     const taskTmp = TestData.tasks.find(t => t.id === task.id); // Ищем по id
@@ -83,4 +88,7 @@ export class TaskDAOImpl implements TaskDAO {
     return undefined;
   }
 
+  getLastIdTask() {
+    return Math.max.apply(Math, TestData.tasks.map(task => task.id)) + 1;
+  }
 }

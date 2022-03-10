@@ -150,10 +150,12 @@
           <app-tasks
             [tasks]="tasks"
             [priorities]="priorities"
+            (addTask)="onAddTask($event)"
             (updateTask)="onUpdateTask($event)"
             (deleteTask)="onDeleteTask($event)"
             (selectCategory)="onSelectCategory($event)"
 
+            [selectedCategory]="selectedCategory"
             (filterByStatus)="onFilterTasksByStatus($event)"
             (filterByTitle)="onSearchTasks($event)"
             (filterByPriority)="onFilterTasksByPriority($event)"

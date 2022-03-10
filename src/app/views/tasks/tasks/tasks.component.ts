@@ -4,7 +4,7 @@ import {Task} from "../../../model/Task";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {EditTaskDialogComponent} from "../../../dialog/edit-task-dialog/edit-task-dialog.component";
 import {ConfirmDialogComponent} from "../../../dialog/confirm-dialog/confirm-dialog.component";
 import {Category} from "../../../model/Category";
@@ -20,6 +20,9 @@ export class TasksComponent implements OnInit, AfterViewInit {
   // Данные компоненты будут иметь ссылки на объекты в HTML
   @ViewChild(MatPaginator, {static: false}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) private sort: MatSort;
+
+  @Output()
+  addTask = new EventEmitter<Task>();
 
   @Output()
   updateTask = new EventEmitter<Task>();
@@ -47,6 +50,9 @@ export class TasksComponent implements OnInit, AfterViewInit {
   selectedStatusFilter: boolean = null;   // по-умолчанию будут показываться все задачи
   selectedPriorityFilter: Priority = null;
 
+  @Input()
+  selectedCategory: Category;
+
   // Передаем список задач с помощью Input на Set
   @Input('tasks')
   public set setTasks(tasks: Task[]) {
@@ -67,6 +73,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   get getDataSource(): MatTableDataSource<Task> {
     return this.dataSource;
   }
+
   get getDisplayedColumns(): string[] {
     return this.displayedColumns;
   }
@@ -75,7 +82,8 @@ export class TasksComponent implements OnInit, AfterViewInit {
   constructor(
     private dataHandler: DataHandlerService, // Доступ к данным
     private dialog: MatDialog // Работа с диалоговым окном
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     //this.dataHandler.findAllTasks().subscribe(tasks => this.tasks = tasks);
@@ -174,7 +182,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
       maxWidth: '500px',
       data: {
         dialogTitle: 'Action confirmation',
-        message: 'Do you really want to delete the task:\n' +  task.title + '?'
+        message: 'Do you really want to delete the task:\n' + task.title + '?'
       },
       autoFocus: false
     });
@@ -208,10 +216,21 @@ export class TasksComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // Фильтрация по приоритету
   onFilterByPriority(priority: Priority) {
     if (priority != this.selectedPriorityFilter) {
       this.selectedPriorityFilter = priority;
       this.filterByPriority.emit(this.selectedPriorityFilter);
     }
+  }
+
+  // Диалоговое окно добавления новой задачи
+  openAddTaskDialog() {
+    const task = new Task(null, '', false, null, this.selectedCategory);
+    const dialogRef = this.dialog.open(EditTaskDialogComponent, {data: [task, "Add task"], autoFocus: false});
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.addTask.emit(task);
+    });
   }
 }
