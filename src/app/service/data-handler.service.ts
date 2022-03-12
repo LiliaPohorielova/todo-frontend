@@ -44,6 +44,10 @@ export class DataHandlerService {
     return this.priorityDao.findAll();
   }
 
+  addTask(task: Task) {
+    return this.taskDao.create(task);
+  }
+
   updateTask(task: Task): Observable<Task> {
     return this.taskDao.update(task);
   }
@@ -56,15 +60,15 @@ export class DataHandlerService {
     return this.taskDao.search(category, searchText, status, priority);
   }
 
+  addCategory(title: string) {
+    return this.categoryDao.create(new Category(null, title));
+  }
+
   updateCategory(category: Category): Observable<Category> {
     return this.categoryDao.update(category);
   }
 
   deleteCategory(id: number): Observable<Category> {
     return this.categoryDao.delete(id);
-  }
-
-  addTask(task: Task) {
-    return this.taskDao.create(task);
   }
 }

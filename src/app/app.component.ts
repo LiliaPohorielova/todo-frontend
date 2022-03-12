@@ -87,9 +87,22 @@ export class AppComponent implements OnInit{
       });
   }
 
+  updateCategories() {
+    this.dataHandler.getAllCategories().subscribe((categories: Category[]) => {
+      this.categories = categories;
+    });
+  }
+
   onAddTask(task: Task) {
     this.dataHandler.addTask(task).subscribe(
       result => {this.updateTasks()}
+    );
+  }
+
+  onAddCategory(title: string) {
+
+    this.dataHandler.addCategory(title).subscribe(
+      result => {this.updateCategories()}
     );
   }
 }

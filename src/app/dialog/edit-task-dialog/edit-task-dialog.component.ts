@@ -5,6 +5,7 @@ import {DataHandlerService} from "../../service/data-handler.service";
 import {Category} from "../../model/Category";
 import {Priority} from "../../model/Priority";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
+import {OperationType} from "../OperationType";
 
 @Component({
   selector: 'app-edit-task-dialog',
@@ -21,7 +22,7 @@ export class EditTaskDialogComponent implements OnInit {
 
     // Внедряем данные, которые получаем из родительского компонента
     @Inject(MAT_DIALOG_DATA)
-    private data: [Task, string], // Данные, которые передали в диалоговое окно
+    private data: [Task, string, OperationType], // Данные, которые передали в диалоговое окно
 
     private dataHandler: DataHandlerService, // Ссылка на сервис для работы с данными
     private dialog: MatDialog // Для открытия нового диалогового окна из текущего (Желаете подтвердить? -Да, -Нет)
@@ -35,6 +36,7 @@ export class EditTaskDialogComponent implements OnInit {
   tmpCategory: Category; // Сохраняем новую категорию
   tmpPriority: Priority; // Сохраняем новый приоритет
   tmpDate: Date; // Сохраняю новую дату
+  operationType: OperationType;
 
   get getDialogTitle(): string {
     return this.dialogTitle;
@@ -55,6 +57,7 @@ export class EditTaskDialogComponent implements OnInit {
   ngOnInit(): void {
     this.task = this.data[0]; // Получаем отредактированную задачу
     this.dialogTitle = this.data[1]; //Текст для заголовка
+    this.operationType = this.data[2];
     this.tmpTitle = this.task.title; // Отображаем то название, которое было раньше
     this.tmpCategory = this.task.category; // Категория, которая была раньше
     this.tmpPriority = this.task.priority; // Приоритет, который был раньше
@@ -97,6 +100,10 @@ export class EditTaskDialogComponent implements OnInit {
   // Не выполняем задачу
   notComplete() {
     this.dialogRef.close('notComplete');
+  }
+
+  canBeDeleted(): boolean {
+    return this.operationType === OperationType.EDIT;
   }
 }
 

@@ -6,9 +6,12 @@ import {TestData} from "../../TestData";
 
 export class CategoryDAOImpl implements CategoryDAO {
 
-  create(T: Category): Observable<Category> {
-    // @ts-ignore
-    return undefined;
+  create(category: Category): Observable<Category> {
+    if (category.id === null || category.id === 0) {
+      category.id = this.getLastIdCategory();
+    }
+    TestData.categories.push(category);
+    return of(category);
   }
 
   update(category: Category): Observable<Category> {
@@ -44,5 +47,9 @@ export class CategoryDAOImpl implements CategoryDAO {
   search(title: string): Observable<Category[]> {
     // @ts-ignore
     return undefined;
+  }
+
+  getLastIdCategory() {
+    return Math.max.apply(Math, TestData.categories.map(cat => cat.id)) + 1;
   }
 }

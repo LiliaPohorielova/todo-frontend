@@ -107,13 +107,14 @@
       mat-raised-button
       (click)="complete()"
       class="green"
-      *ngIf="!getTask.completed; else elseBlock">
+      *ngIf="canBeDeleted() && !getTask.completed; else elseBlock">
       Complete task
     </button>
 
     <ng-template #elseBlock>
       <button
         mat-raised-button
+        *ngIf="canBeDeleted()"
         (click)="notComplete()">
         Incomplete task
       </button>
@@ -122,6 +123,7 @@
     <!-- Удалить задачу -->
     <button
       mat-button
+      *ngIf="canBeDeleted()"
       (click)="delete()"
       class="red">
       Delete task
