@@ -23,6 +23,9 @@ export class CategoriesComponent implements OnInit {
   @Output()
   selectCategory = new EventEmitter<Category>();
 
+  @Output()
+  searchCategory = new EventEmitter<string>();
+
   @Input()
   selectedCategory: Category;
 
@@ -36,6 +39,7 @@ export class CategoriesComponent implements OnInit {
   deleteCategory = new EventEmitter<Category>();
 
   indexMouseMove: number;
+  searchCategoryTitle: string;
 
   //Dependency Injection With Constructor
   constructor(
@@ -102,5 +106,10 @@ export class CategoriesComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) this.addCategory.emit(result as string);
     });
+  }
+
+  search() {
+    if (this.searchCategoryTitle == null) return;
+    this.searchCategory.emit(this.searchCategoryTitle);
   }
 }

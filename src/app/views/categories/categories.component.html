@@ -12,6 +12,40 @@
   <div class="sidebar-wrapper">
     <ul class="nav">
 
+      <!-- Category Search -->
+      <div class="search-category-area">
+        <mat-form-field class="example-full-width" style="width: 210px">
+          <input
+            #inputSearchCategory
+            (keydown.escape)="searchCategoryTitle = ''; search()"
+            (keyup)="search()"
+            [(ngModel)]="searchCategoryTitle"
+
+            matInput
+            maxlength="256"
+            placeholder="Category search"
+          />
+
+          <button
+            (click)="searchCategoryTitle = ''; search()"
+            *ngIf="inputSearchCategory.value.trim().length > 0" aria-label="Clear"
+            class="search-category-button"
+            mat-button
+            mat-icon-button
+            matSuffix
+          >
+            <mat-icon>clear</mat-icon>
+          </button>
+          <button
+            *ngIf="inputSearchCategory.value.trim().length === 0"
+            mat-button
+            mat-icon-button
+            matSuffix>
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
       <!-- All Categories -->
       <li class="nav-item pointer"
           (click)="showTasksByCategory(null)"
@@ -46,6 +80,9 @@
         </a>
       </li>
 
+      <div *ngIf="categories && categories.length == 0">
+        <p class="not-found">Ничего не найдено</p>
+      </div>
 
     </ul>
   </div>

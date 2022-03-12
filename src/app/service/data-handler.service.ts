@@ -71,4 +71,8 @@ export class DataHandlerService {
   deleteCategory(id: number): Observable<Category> {
     return this.categoryDao.delete(id);
   }
+
+  searchCategories(title: string) {
+    return this.categoryDao.search(title);
+  }
 }

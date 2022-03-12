@@ -62,3 +62,7 @@ span.add-icon-area {
   overflow: hidden;
   text-align: center;
 }
+
+.search-category-area {
+  padding-left: 17px;
+}

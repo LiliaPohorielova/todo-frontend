@@ -18,6 +18,13 @@
         mat-icon-button matSuffix>
         <mat-icon>clear</mat-icon>
       </button>
+      <button
+        *ngIf="filterInput.value.trim().length === 0"
+        mat-button
+        mat-icon-button
+        matSuffix>
+        <mat-icon>search</mat-icon>
+      </button>
     </mat-form-field>
   </div>
 
