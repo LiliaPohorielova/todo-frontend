@@ -61,7 +61,7 @@ export class CategoriesComponent implements OnInit {
     this.selectCategory.emit(this.selectedCategory);
   }
 
-  //Сщхраняет индекс той категории, на которую наведена мышка
+  //Сохраняет индекс той категории, на которую наведена мышка
   showEditIcon(index: number) {
     this.indexMouseMove = index;
   }
@@ -85,12 +85,12 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  openDeleteDialog(category: Task) {
+  openDeleteDialog(category: Category) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '500px',
       data: {
         dialogTitle: 'Action confirmation',
-        message: 'Do you really want to delete the task:\n' +  category.title + '?'
+        message: 'Do you really want to delete the category:\n' +  category.title + '?'
       },
       autoFocus: false
     });

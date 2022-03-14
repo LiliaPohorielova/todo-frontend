@@ -25,4 +25,19 @@ export class SettingsDialogComponent implements OnInit {
   onClose() {
     this.dialogRef.close(false);
   }
+
+  // добавили приоритет
+  onAddPriority(priority: Priority): void {
+    this.dataHandler.addPriority(priority).subscribe();
+  }
+
+  // удалили приоритет
+  onDeletePriority(priority: Priority): void {
+    this.dataHandler.deletePriority(priority.id).subscribe();
+  }
+
+  // обновили приоритет
+  onUpdatePriority(priority: Priority): void {
+    this.dataHandler.updatePriority(priority).subscribe();
+  }
 }

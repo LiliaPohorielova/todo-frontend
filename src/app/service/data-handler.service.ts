@@ -40,10 +40,6 @@ export class DataHandlerService {
     return this.categoryDao.findAll();
   }
 
-  getAllPriorities(): Observable<Priority[]> {
-    return this.priorityDao.findAll();
-  }
-
   addTask(task: Task) {
     return this.taskDao.create(task);
   }
@@ -91,5 +87,23 @@ export class DataHandlerService {
 
   getUncompletedTotalCount(): Observable<number> {
     return this.taskDao.getUncompletedCountInCategory(null);
+  }
+
+  // Priorities
+
+  getAllPriorities(): Observable<Priority[]> {
+    return this.priorityDao.findAll();
+  }
+
+  addPriority(priority: Priority): Observable<Priority> {
+    return this.priorityDao.create(priority);
+  }
+
+  deletePriority(id: number): Observable<Priority> {
+    return this.priorityDao.delete(id);
+  }
+
+  updatePriority(priority: Priority): Observable<Priority> {
+    return this.priorityDao.update(priority);
   }
 }
