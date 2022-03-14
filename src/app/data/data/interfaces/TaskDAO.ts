@@ -12,9 +12,9 @@ export interface TaskDAO extends BaseDAO<Task> {
 
   // найти кол-во завершенных задач по категории
   // если категория = null, кол-во всех завершенных задач
-  getCompletedCountByCategory(category: Category): Observable<number>;
-  getUncompletedCountByCategory(category: Category): Observable<number>;
-  getTotalCountByCategory(category: Category): Observable<number>;
+  getCompletedCountInCategory(category: Category): Observable<number>;
+  getUncompletedCountInCategory(category: Category): Observable<number>;
+  getTotalCountInCategory(category: Category): Observable<number>;
 
   // кол-во задач всего
   getTotalCount(): Observable<number>;

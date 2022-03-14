@@ -36,11 +36,11 @@ export class DataHandlerService {
     return this.taskDao.findAll();
   }
 
-  getAllCategories(): Observable<Category[]>{
+  getAllCategories(): Observable<Category[]> {
     return this.categoryDao.findAll();
   }
 
-  getAllPriorities(): Observable<Priority[]>{
+  getAllPriorities(): Observable<Priority[]> {
     return this.priorityDao.findAll();
   }
 
@@ -74,5 +74,22 @@ export class DataHandlerService {
 
   searchCategories(title: string) {
     return this.categoryDao.search(title);
+  }
+
+  // Statistic
+  getTotalCountInCategory(category: Category): Observable<number> {
+    return this.taskDao.getTotalCountInCategory(category);
+  }
+
+  getCompletedCountInCategory(category: Category): Observable<number> {
+    return this.taskDao.getCompletedCountInCategory(category);
+  }
+
+  getUncompletedCountInCategory(category: Category): Observable<number> {
+    return this.taskDao.getUncompletedCountInCategory(category);
+  }
+
+  getUncompletedTotalCount(): Observable<number> {
+    return this.taskDao.getUncompletedCountInCategory(null);
   }
 }

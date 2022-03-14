@@ -47,11 +47,11 @@ export class TaskDAOImpl implements TaskDAO {
   }
 
   search(category: Category, searchText: string, status: boolean, priority: Priority): Observable<Task[]> {
-    return of(this.searchTodos(category, searchText, status, priority));
+    return of(this.searchTasks(category, searchText, status, priority));
   }
 
   // Поиск задач по параметрам
-  private searchTodos(category: Category, searchText: string, status: boolean, priority: Priority): Task[] {
+  private searchTasks(category: Category, searchText: string, status: boolean, priority: Priority): Task[] {
     let allTasks = TestData.tasks;
 
     if (status != null)
@@ -72,23 +72,24 @@ export class TaskDAOImpl implements TaskDAO {
     return allTasks;
   }
 
-  getCompletedCountByCategory(category: Category): Observable<number> {
-    return undefined;
+  getLastIdTask() {
+    return Math.max.apply(Math, TestData.tasks.map(task => task.id)) + 1;
+  }
+
+  // Statistic
+  getTotalCountInCategory(category: Category): Observable<number> {
+    return of(this.searchTasks(category, null, null,null).length);
+  }
+
+  getCompletedCountInCategory(category: Category): Observable<number> {
+    return of(this.searchTasks(category, null, true,null).length);
+  }
+
+  getUncompletedCountInCategory(category: Category): Observable<number> {
+    return of(this.searchTasks(category, null, false,null).length);
   }
 
   getTotalCount(): Observable<number> {
-    return undefined;
-  }
-
-  getTotalCountByCategory(category: Category): Observable<number> {
-    return undefined;
-  }
-
-  getUncompletedCountByCategory(category: Category): Observable<number> {
-    return undefined;
-  }
-
-  getLastIdTask() {
-    return Math.max.apply(Math, TestData.tasks.map(task => task.id)) + 1;
+    return of(TestData.tasks.length);
   }
 }

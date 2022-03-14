@@ -66,3 +66,7 @@ span.add-icon-area {
 .search-category-area {
   padding-left: 17px;
 }
+
+.sidebar-background {
+  background-image: url(../../../assets/img/sidebar-1.jpg) !important;
+}

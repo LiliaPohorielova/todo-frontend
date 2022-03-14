@@ -1,0 +1,17 @@
+<div class="card card-stats" [ngClass]="{'completed-card': completed}">
+  <div class="card-header card-header-warning card-header-icon">
+    <div class="card-icon">
+      <i class="material-icons">{{iconName}}</i>
+    </div>
+    <p class="card-category"></p>
+    <h3 class="card-title">
+      {{count1}}
+      <span *ngIf="countTotal">/ {{countTotal}}</span>
+    </h3>
+  </div>
+  <div class="card-footer">
+    <div class="stats">
+      <p class="stat-card-title">{{title}}</p>
+    </div>
+  </div>
+</div>

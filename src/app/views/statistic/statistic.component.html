@@ -1,0 +1,33 @@
+<div class="row">
+    <app-statistic-card
+      class="col-lg-3 col-md-6 col-sm-6"
+      title="Completed tasks"
+      iconName="done"
+      [count1]="completeTasksInCategory"
+      [countTotal]="totalTasksInCategory"
+      [completed]="true"
+    ></app-statistic-card>
+
+    <app-statistic-card
+      class="col-lg-3 col-md-6 col-sm-6"
+      title="Uncompleted tasks"
+      iconName="thumb_down_alt"
+      [count1]="uncompletedTasksInCategory"
+      [countTotal]="totalTasksInCategory"
+    ></app-statistic-card>
+
+    <app-statistic-card
+      class="col-lg-3 col-md-6 col-sm-6"
+      title="Completed tasks percent"
+      iconName="poll"
+      [count1]="completeTasksInCategory ? (completeTasksInCategory/totalTasksInCategory | percent) : '0 %'"
+      [completed]="true"
+    ></app-statistic-card>
+
+    <app-statistic-card
+      class="col-lg-3 col-md-6 col-sm-6"
+      title="Uncompleted tasks percent"
+      iconName="thumb_down_alt"
+      [count1]="uncompletedTasksInCategory ? (uncompletedTasksInCategory/totalTasksInCategory | percent) : '0 %'"
+    ></app-statistic-card>
+</div>

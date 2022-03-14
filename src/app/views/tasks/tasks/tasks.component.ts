@@ -87,9 +87,8 @@ export class TasksComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    //this.dataHandler.findAllTasks().subscribe(tasks => this.tasks = tasks);
     this.dataSource = new MatTableDataSource();
-    this.fillTable(); //заполняем таблицу данными и говорим ей как сортировать
+    this.onSelectCategory(null);
   }
 
   // Метод вызывается после инициализации (сначала все данные попали в таблицу, а потом мы с ними можем работать, сортировать и тд)

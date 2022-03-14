@@ -1,0 +1,30 @@
+<footer class="footer">
+  <div class="container-fluid">
+    <nav class="float-left">
+      <ul>
+        <li>
+          <a [href]="site">
+            Creative Project
+          </a>
+        </li>
+        <li>
+          <a (click)="openAboutDialog()" class="link">
+            About Us
+          </a>
+        </li>
+        <li>
+          <a [href]="blog">
+            Blog
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="copyright float-right">
+      &copy;
+      <script>
+        document.write(new Date().getFullYear())
+      </script>Made with <i class="material-icons">favorite</i> by
+      <a [href]="site" target="_blank">Lilia Pogorelova</a> for a better web
+    </div>
+  </div>
+</footer>
