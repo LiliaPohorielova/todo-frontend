@@ -16,6 +16,9 @@ export class StatisticComponent implements OnInit {
   @Input()
   uncompletedTasksInCategory: number;
 
+  @Input()
+  showStatistic: boolean;
+
   constructor() { }
 
   ngOnInit(): void { }

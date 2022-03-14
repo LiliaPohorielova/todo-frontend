@@ -43,3 +43,11 @@ body {
   border-bottom: 1px solid #dadada;
   padding-top: 20px;
 }
+
+.main-panel > .content {
+  margin-top: 30px !important;
+}
+
+app-header {
+  width: 100% ;
+}

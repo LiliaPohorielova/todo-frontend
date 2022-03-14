@@ -1,4 +1,5 @@
-<div class="row">
+<div *ngIf="showStatistic">
+  <div class="row">
     <app-statistic-card
       class="col-lg-3 col-md-6 col-sm-6"
       title="Completed tasks"
@@ -30,4 +31,5 @@
       iconName="thumb_down_alt"
       [count1]="uncompletedTasksInCategory ? (uncompletedTasksInCategory/totalTasksInCategory | percent) : '0 %'"
     ></app-statistic-card>
+  </div>
 </div>
