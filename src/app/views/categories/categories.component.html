@@ -1,76 +1,75 @@
-<div class="sidebar" data-color="purple" data-background-color="white">
-  <div class="logo">
+<div class="logo">
     <span class="my-simple-text nav-title">
       Categories
     </span>
-    <span class="add-icon-area">
+  <span class="add-icon-area">
       <button mat-icon-button class="add-icon" (click)="openAddCategoryDialog()">
         <mat-icon>add</mat-icon>
       </button>
     </span>
-  </div>
-  <div class="sidebar-wrapper">
-    <ul class="nav">
+</div>
+<div class="sidebar-wrapper">
+  <ul class="nav">
 
-      <!-- Category Search -->
-      <div class="search-category-area">
-        <mat-form-field class="example-full-width" style="width: 210px">
-          <input
-            #inputSearchCategory
-            (keydown.escape)="searchCategoryTitle = ''; search()"
-            (keyup)="search()"
-            [(ngModel)]="searchCategoryTitle"
+    <!-- Category Search -->
+    <div class="search-category-area">
+      <mat-form-field class="example-full-width" style="width: 210px">
+        <input
+          #inputSearchCategory
+          (keydown.escape)="searchCategoryTitle = ''; search()"
+          (keyup)="search()"
+          [(ngModel)]="searchCategoryTitle"
 
-            matInput
-            maxlength="256"
-            placeholder="Category search"
-          />
+          matInput
+          maxlength="256"
+          placeholder="Category search"
+        />
 
-          <button
-            (click)="searchCategoryTitle = ''; search()"
-            *ngIf="inputSearchCategory.value.trim().length > 0" aria-label="Clear"
-            class="search-category-button"
-            mat-button
-            mat-icon-button
-            matSuffix
-          >
-            <mat-icon>clear</mat-icon>
-          </button>
-          <button
-            *ngIf="inputSearchCategory.value.trim().length === 0"
-            mat-button
-            mat-icon-button
-            matSuffix>
-            <mat-icon>search</mat-icon>
-          </button>
-        </mat-form-field>
-      </div>
+        <button
+          (click)="searchCategoryTitle = ''; search()"
+          *ngIf="inputSearchCategory.value.trim().length > 0" aria-label="Clear"
+          class="search-category-button"
+          mat-button
+          mat-icon-button
+          matSuffix
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+        <button
+          *ngIf="inputSearchCategory.value.trim().length === 0"
+          mat-button
+          mat-icon-button
+          matSuffix>
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
 
-      <!-- All Categories -->
-      <li class="nav-item category"
-          (click)="showTasksByCategory(null)"
-          [class.active]="selectedCategory === null">
-        <a class="nav-link pointer">
-          <span class="all-category-title">All Categories</span>
-          <span class="uncompleted-count"> {{uncompletedTotal}}</span>
-        </a>
-      </li>
+    <!-- All Categories -->
+    <li class="nav-item category"
+        (click)="showTasksByCategory(null)"
+        [class.active]="selectedCategory === null">
+      <a class="nav-link pointer">
+        <span class="all-category-title">All Categories</span>
+        <span class="uncompleted-count"> {{uncompletedTotal}}</span>
+      </a>
+    </li>
 
-      <!-- Line -->
-      <div class="line"></div>
+    <!-- Line -->
+    <div class="line"></div>
 
-      <!-- Some Categories -->
-      <li class="nav-item pointer"
-          *ngFor="let mapValue of selectedCategoryMap | keyvalue; let index = index"
-          (click)="showTasksByCategory(mapValue.key)"
-          [class.active]="mapValue.key === selectedCategory"
+    <!-- Some Categories -->
+    <li class="nav-item pointer"
+        *ngFor="let mapValue of selectedCategoryMap | keyvalue; let index = index"
+        (click)="showTasksByCategory(mapValue.key)"
+        [class.active]="mapValue.key === selectedCategory"
 
-          (mouseleave)="showEditIcon(null)"
-          (mouseenter)="showEditIcon(index)"
-      >
-        <a class="nav-link">
-          <span class="category-title">{{mapValue.key.title}}</span>
-          <span class="edit-category-icon-area">
+        (mouseleave)="showEditIcon(null)"
+        (mouseenter)="showEditIcon(index)"
+    >
+      <a class="nav-link">
+        <span class="category-title">{{mapValue.key.title}}</span>
+        <span class="edit-category-icon-area">
             <mat-icon
               class="edit-category-icon"
               (click)="$event.stopPropagation(); openEditDialog(mapValue.key)"
@@ -78,16 +77,16 @@
               edit
             </mat-icon>
           </span>
-          <!--сколько невыполненных задач-->
-          <span class="uncompleted-count"> {{mapValue.value}}</span>
-        </a>
-      </li>
+        <!--сколько невыполненных задач-->
+        <span class="uncompleted-count"> {{mapValue.value}}</span>
+      </a>
+    </li>
 
-      <div *ngIf="categories && categories.length == 0">
-        <p class="not-found">Ничего не найдено</p>
-      </div>
-    </ul>
-  </div>
-
-  <div class="sidebar-background"></div>
+    <div *ngIf="categories && categories.length == 0">
+      <p class="not-found">Ничего не найдено</p>
+    </div>
+  </ul>
 </div>
+
+<div class="sidebar-background"></div>
+

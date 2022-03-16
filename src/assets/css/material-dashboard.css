@@ -15158,7 +15158,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .sidebar {
-  position: fixed;
+/*  position: fixed;*/
   top: 0;
   bottom: 0;
   left: 0;
@@ -15565,7 +15565,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .main-panel {
   position: relative;
   float: right;
-  width: calc(100% - 260px);
+  width: 100%;
   transition: 0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1);
 }
 

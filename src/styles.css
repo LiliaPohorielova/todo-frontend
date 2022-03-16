@@ -1,5 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
 @import "assets/css/material-dashboard.css";
+@import "~intro.js/minified/introjs.min.css";
 
 html, body {
   height: 100%;
@@ -46,8 +46,13 @@ body {
 
 .main-panel > .content {
   margin-top: 30px !important;
+  background-color: transparent !important;
 }
 
 app-header {
-  width: 100% ;
+  width: 100%;
+}
+
+.ng-sidebar {
+  box-shadow: 0 0 13px rgba(0, 0, 0, 0.4);
 }

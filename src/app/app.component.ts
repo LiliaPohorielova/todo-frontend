@@ -4,6 +4,7 @@ import {DataHandlerService} from "./service/data-handler.service";
 import {Category} from "./model/Category";
 import {Priority} from "./model/Priority";
 import {concatMap, count, map, zip} from 'rxjs';
+import {IntroService} from "./service/intro.service";
 
 @Component({
   selector: 'app-root',
@@ -37,7 +38,18 @@ export class AppComponent implements OnInit {
 
   showStatistic = true;
 
-  constructor(private dataHandler: DataHandlerService) {
+  // Menu
+  menuOpened: boolean;
+  showBackdrop: boolean;
+  menuMode: any;
+  menuPosition: any;
+
+  // Внедряем зависимости через конструктор
+  constructor(
+    private dataHandler: DataHandlerService,
+    private introService: IntroService
+  ) {
+    this.setMenuValues();
   }
 
   ngOnInit() {
@@ -47,6 +59,8 @@ export class AppComponent implements OnInit {
     this.fillCategories(); // заполнить меню с категориями
 
     this.onSelectCategory(null); // показать все задачи
+
+    this.introService.startIntroJs(true);
   }
 
   /* Categories */
@@ -93,7 +107,8 @@ export class AppComponent implements OnInit {
     this.searchCategoryText = title;
     this.dataHandler.searchCategories(title).subscribe(
       categories => {
-        this.categories = categories
+        this.categories = categories;
+        this.fillCategories();
       }
     );
   }
@@ -203,5 +218,23 @@ export class AppComponent implements OnInit {
 
   toggleStatistic(showStatistic: boolean) {
     this.showStatistic = showStatistic;
+  }
+
+  onClosedMenu() {
+    this.menuOpened = false;
+  }
+
+  // параметры меню
+  setMenuValues() {
+    this.menuPosition = 'left';
+    this.menuOpened = true;
+    this.menuMode = 'push';
+    this.showBackdrop = false;
+
+  }
+
+  // показать скрыть меню
+  toggleMenu() {
+    this.menuOpened = !this.menuOpened;
   }
 }
