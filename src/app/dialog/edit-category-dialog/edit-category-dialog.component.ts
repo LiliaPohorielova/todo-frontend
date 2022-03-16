@@ -69,4 +69,9 @@ export class EditCategoryDialogComponent implements OnInit {
   canBeDeleted(): boolean {
     return this.operationType === OperationType.EDIT;
   }
+
+  // нажали отмену (ничего не сохраняем и закрываем окно)
+  onCancel(): void {
+    this.dialogRef.close(false);
+  }
 }

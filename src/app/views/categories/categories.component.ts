@@ -17,6 +17,18 @@ export class CategoriesComponent implements OnInit {
   @Input()
   categories: Category[];
 
+  @Input()
+  selectedCategory: Category;
+
+  @Input('categoryMap')
+  set setCategoryMap(categoryMap: Map<Category, number>) {
+    this.selectedCategoryMap = categoryMap;
+  }
+
+  // кол-во невыполненных задач всего
+  @Input()
+  uncompletedTotal: number;
+
   // Выбрали категорию на сайте - узнаем какую именно
   // EventEmitter - произошло какое-то событие Event
   // selectCategory - название такое же как в HTML
@@ -25,9 +37,6 @@ export class CategoriesComponent implements OnInit {
 
   @Output()
   searchCategory = new EventEmitter<string>();
-
-  @Input()
-  selectedCategory: Category;
 
   @Output()
   addCategory = new EventEmitter<string>();
@@ -40,6 +49,7 @@ export class CategoriesComponent implements OnInit {
 
   indexMouseMove: number;
   searchCategoryTitle: string;
+  selectedCategoryMap: Map<Category, number>;
 
   //Dependency Injection With Constructor
   constructor(

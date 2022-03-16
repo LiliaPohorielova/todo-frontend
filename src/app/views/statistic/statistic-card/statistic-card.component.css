@@ -1,5 +1,5 @@
 .card-title {
-  font-size: 35px;
+  font-size: 34px;
 }
 
 .stat-card-title {
@@ -9,4 +9,12 @@
 
 .completed-card {
   border: 3px solid #93D893 !important;
+}
+
+h3 {
+  display: inline-block;
+}
+
+.card-header {
+  display: inline-block;
 }

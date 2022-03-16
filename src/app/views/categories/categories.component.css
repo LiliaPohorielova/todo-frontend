@@ -12,7 +12,7 @@
 .category-title {
   width: 70%;
   display: inline-block;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .all-category-title {
@@ -69,4 +69,18 @@ span.add-icon-area {
 
 .sidebar-background {
   background-image: url(../../../assets/img/sidebar-1.jpg) !important;
+}
+
+.sidebar-wrapper .mat-form-field {
+  padding-bottom: 0;
+}
+
+.uncompleted-count {
+  background-color: #eaeaea;
+  border-radius: 3px;
+  padding: 5px;
+  color: black;
+  width: 15%;
+  display: inline-block;
+  text-align: center;
 }
