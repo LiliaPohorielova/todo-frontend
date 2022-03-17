@@ -13824,7 +13824,7 @@ fieldset[disabled] .form-group .form-control {
   position: absolute;
   width: 100%;
   padding-top: 10px;
-  z-index: 1029;
+  z-index: 1;
 }
 
 .navbar .navbar-wrapper {
@@ -17463,7 +17463,7 @@ html[dir="rtl"] .form-check .form-check-sign .check:before {
 .card .card-header.card-header-image {
   position: relative;
   padding: 0;
-  z-index: 1;
+  z-index: -1;
   margin-left: 15px;
   margin-right: 15px;
   margin-top: -30px;
@@ -17717,7 +17717,7 @@ html[dir="rtl"] .form-check .form-check-sign .check:before {
 }
 
 .card .card-header {
-  z-index: 3 !important;
+  z-index: 0 !important;
 }
 
 .card .card-header .card-title {
@@ -19154,7 +19154,7 @@ Copyright (c) 2015 Daniel Eden
 
   .sidebar,
   .off-canvas-sidebar nav .navbar-collapse {
-    position: fixed;
+    /*position: fixed;*/
     display: block;
     top: 0;
     height: 100vh;
@@ -19169,16 +19169,16 @@ Copyright (c) 2015 Daniel Eden
     text-align: left;
     padding-right: 0px;
     padding-left: 0;
-    -webkit-transform: translate3d(260px, 0, 0);
+    /*-webkit-transform: translate3d(260px, 0, 0);*/
     -moz-transform: translate3d(260px, 0, 0);
     -o-transform: translate3d(260px, 0, 0);
     -ms-transform: translate3d(260px, 0, 0);
-    transform: translate3d(260px, 0, 0);
-    -webkit-transition: all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1);
+    /*transform: translate3d(260px, 0, 0);*/
+    /*-webkit-transition: all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1);
     -moz-transition: all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1);
     -o-transition: all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1);
     -ms-transition: all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1);
-    transition: all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1);
+    transition: all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1);*/
   }
 
   .sidebar>ul,

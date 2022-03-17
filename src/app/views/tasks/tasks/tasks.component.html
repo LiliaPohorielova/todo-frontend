@@ -85,11 +85,11 @@
           searchTaskText = ''; onFilterByTitle()"
           *ngIf="selectedStatusFilter != null || selectedPriorityFilter != null ||
           (searchTaskText != null && searchTaskText.trim() != '')"
-          aria-label="Clear" mat-raised-button matSuffix>
+          aria-label="Clear" mat-button matSuffix>
           Reset filters
         </button>
       </div>
-      <div class="text-left col-6">
+      <div class="text-right pb-3 col-6">
         <button class="purple" mat-raised-button (click)="openAddTaskDialog()">Add new task</button>
       </div>
     </div>

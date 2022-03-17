@@ -5,6 +5,7 @@ import {Category} from "./model/Category";
 import {Priority} from "./model/Priority";
 import {concatMap, count, map, zip} from 'rxjs';
 import {IntroService} from "./service/intro.service";
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-root',
@@ -44,11 +45,23 @@ export class AppComponent implements OnInit {
   menuMode: any;
   menuPosition: any;
 
+  // Adaptive layout
+  isMobile: boolean;
+  isTablet: boolean;
+
   // Внедряем зависимости через конструктор
   constructor(
     private dataHandler: DataHandlerService,
-    private introService: IntroService
+    private introService: IntroService,
+    private deviceService: DeviceDetectorService
   ) {
+    // определяем тип устройства
+    this.isMobile = deviceService.isMobile();
+    this.isTablet = deviceService.isTablet();
+
+    this.showStatistic = !this.isMobile;
+
+
     this.setMenuValues();
   }
 
@@ -60,7 +73,8 @@ export class AppComponent implements OnInit {
 
     this.onSelectCategory(null); // показать все задачи
 
-    this.introService.startIntroJs(true);
+    if (!this.isMobile && !this.isTablet)
+      this.introService.startIntroJs(true);
   }
 
   /* Categories */
@@ -227,10 +241,16 @@ export class AppComponent implements OnInit {
   // параметры меню
   setMenuValues() {
     this.menuPosition = 'left';
-    this.menuOpened = true;
-    this.menuMode = 'push';
-    this.showBackdrop = false;
 
+    if (this.isMobile) {
+      this.menuOpened = false;
+      this.menuMode = 'over';
+      this.showBackdrop = true;
+    } else {
+      this.menuOpened = true;
+      this.menuMode = 'push';
+      this.menuOpened = false;
+    }
   }
 
   // показать скрыть меню
