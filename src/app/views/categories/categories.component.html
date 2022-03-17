@@ -73,7 +73,7 @@
             <mat-icon
               class="edit-category-icon"
               (click)="$event.stopPropagation(); openEditDialog(mapValue.key)"
-              *ngIf="indexMouseMove === index">
+              *ngIf="indexMouseMove === index || isMobile || isTablet">
               edit
             </mat-icon>
           </span>

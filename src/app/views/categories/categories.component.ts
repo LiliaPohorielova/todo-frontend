@@ -5,6 +5,7 @@ import {ConfirmDialogComponent} from "../../dialog/confirm-dialog/confirm-dialog
 import {MatDialog} from "@angular/material/dialog";
 import {EditCategoryDialogComponent} from "../../dialog/edit-category-dialog/edit-category-dialog.component";
 import {OperationType} from "../../dialog/OperationType";
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-categories',
@@ -49,12 +50,18 @@ export class CategoriesComponent implements OnInit {
   indexMouseMove: number;
   searchCategoryTitle: string;
   selectedCategoryMap: Map<Category, number>;
+  isMobile: boolean;
+  isTablet: boolean;
 
   //Dependency Injection With Constructor
   constructor(
     private dataHandler: DataHandlerService, // Доступ к данным
-    private dialog: MatDialog // Работа с диалоговым окном
-  ) {  }
+    private dialog: MatDialog, // Работа с диалоговым окном
+    private deviceDetector: DeviceDetectorService
+  ) {
+    this.isMobile = deviceDetector.isMobile();
+    this.isTablet = deviceDetector.isTablet();
+  }
 
   //Метод вызывается после создания данного Компонента;
   ngOnInit() {

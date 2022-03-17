@@ -61,7 +61,6 @@ export class AppComponent implements OnInit {
 
     this.showStatistic = !this.isMobile;
 
-
     this.setMenuValues();
   }
 
@@ -249,7 +248,7 @@ export class AppComponent implements OnInit {
     } else {
       this.menuOpened = true;
       this.menuMode = 'push';
-      this.menuOpened = false;
+      this.showBackdrop = false;
     }
   }
 

@@ -6,6 +6,7 @@ import {Category} from "../../model/Category";
 import {Priority} from "../../model/Priority";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 import {OperationType} from "../OperationType";
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-edit-task-dialog',
@@ -16,18 +17,6 @@ import {OperationType} from "../OperationType";
 // Редактирование задачи в диалоговом окне
 export class EditTaskDialogComponent implements OnInit {
 
-  constructor(
-    // Работаем с текущим диалог. окном (запоминаем ссылку на него)
-    private dialogRef: MatDialogRef<EditTaskDialogComponent>,
-
-    // Внедряем данные, которые получаем из родительского компонента
-    @Inject(MAT_DIALOG_DATA)
-    private data: [Task, string, OperationType], // Данные, которые передали в диалоговое окно
-
-    private dataHandler: DataHandlerService, // Ссылка на сервис для работы с данными
-    private dialog: MatDialog // Для открытия нового диалогового окна из текущего (Желаете подтвердить? -Да, -Нет)
-  ) { }
-
   private dialogTitle: string; // Заголовок окна
   private task: Task; // Задача для редактирования
   private categories: Category[]; // Выбор из всех категорий
@@ -37,6 +26,21 @@ export class EditTaskDialogComponent implements OnInit {
   tmpPriority: Priority; // Сохраняем новый приоритет
   tmpDate: Date; // Сохраняю новую дату
   operationType: OperationType;
+  isMobile: boolean;
+
+  constructor(
+    // Работаем с текущим диалог. окном (запоминаем ссылку на него)
+    private dialogRef: MatDialogRef<EditTaskDialogComponent>,
+    // Внедряем данные, которые получаем из родительского компонента
+    @Inject(MAT_DIALOG_DATA)
+    private data: [Task, string, OperationType], // Данные, которые передали в диалоговое окно
+
+    private dataHandler: DataHandlerService, // Ссылка на сервис для работы с данными
+    private dialog: MatDialog, // Для открытия нового диалогового окна из текущего (Желаете подтвердить? -Да, -Нет)
+    private deviceService: DeviceDetectorService // для определения типа устройства
+  ) {
+    this.isMobile = deviceService.isMobile();
+  }
 
   get getDialogTitle(): string {
     return this.dialogTitle;
@@ -82,7 +86,7 @@ export class EditTaskDialogComponent implements OnInit {
       maxWidth: '500px',
       data: {
         dialogTitle: 'Action confirmation',
-        message: 'Do you really want to delete the task:\n' +  this.task.title + '?'
+        message: 'Do you really want to delete the task:\n' + this.task.title + '?'
       },
       autoFocus: false
     });
@@ -103,6 +107,10 @@ export class EditTaskDialogComponent implements OnInit {
   }
 
   canBeDeleted(): boolean {
+    return this.operationType === OperationType.EDIT;
+  }
+
+  canActivateDeactivate(): boolean {
     return this.operationType === OperationType.EDIT;
   }
 }

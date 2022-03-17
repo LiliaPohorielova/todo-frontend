@@ -86,28 +86,35 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-
-  <div class="col-md-5 col-12">
-    <!-- Сохранить изменения -->
+  <div [ngClass]="{'text-center': isMobile, 'text-left': !isMobile}" class="col-md-6 col-12">
+  <!-- Сохранить изменения -->
     <button
       mat-raised-button
       (click)="onConfirm()"
       [disabled]="inputTitle.value.trim().length == 0"
-      class="purple"> <!-- Если пустое название - кнопка сохранить неактивная! -->
+      class="purple"
+      [ngClass]="{'col-xs-6': isMobile}"
+      > <!-- Если пустое название - кнопка сохранить неактивная! -->
       Save
     </button>
 
     <!-- Отменить изменения (Закрыть) -->
-    <button mat-raised-button mat-dialog-close>Close</button>
+    <button mat-raised-button mat-dialog-close
+            [ngClass]="{'col-xs-6': isMobile}">
+            Close
+    </button>
   </div>
 
-  <div class="col-md-7 col-12 text-right">
+  <div class="col-md-6 col-12 text-right"
+       *ngIf="canActivateDeactivate || canBeDeleted"
+       [ngClass]="{'text-center': isMobile, 'text-right': !isMobile, 'pt-3': isMobile}">
     <!-- Выполнить задачу -->
     <button
       mat-raised-button
       (click)="complete()"
       class="green"
-      *ngIf="canBeDeleted() && !getTask.completed; else elseBlock">
+      *ngIf="canBeDeleted() && !getTask.completed; else elseBlock"
+      [ngClass]="{'col-sm-12': isMobile}">
       Complete task
     </button>
 
@@ -115,7 +122,8 @@
       <button
         mat-raised-button
         *ngIf="canBeDeleted()"
-        (click)="notComplete()">
+        (click)="notComplete()"
+        [ngClass]="{'col-sm-12': isMobile}">
         Incomplete task
       </button>
     </ng-template>
@@ -125,7 +133,8 @@
       mat-button
       *ngIf="canBeDeleted()"
       (click)="delete()"
-      class="red">
+      class="red"
+      [ngClass]="{'pt-2': isMobile}">
       Delete task
     </button>
   </div>
