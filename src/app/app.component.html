@@ -23,19 +23,20 @@
 
     >
 
-      <!-- Categories -->
       <app-categories
-        (selectCategory)="onSelectCategory($event)"
-        (addCategory)="onAddCategory($event)"
-        (deleteCategory)="onDeleteCategory($event)"
-        (updateCategory)="onUpdateCategory($event)"
-        (searchCategory)="onSearchCategory($event)"
+        (addCategory)="addCategory($event)"
+        (deleteCategory)="deleteCategory($event)"
+        (searchCategory)="searchCategory($event)"
+        (selectCategory)="selectCategory($event)"
+        (updateCategory)="updateCategory($event)"
 
-        [uncompletedTotal]="uncompletedTotalTasksCount"
-        [selectedCategory]="selectedCategory"
+
         [categories]="categories"
-        [categoryMap]="categoryMap">
-      </app-categories>
+        [selectedCategory]="selectedCategory"
+        [uncompletedCountForCategoryAll]="uncompletedCountForCategoryAll"
+        [categorySearchValues]="categorySearchValues"
+
+      ></app-categories>
     </div>
 
   </ng-sidebar>
@@ -83,7 +84,7 @@
                 (addTask)="onAddTask($event)"
                 (updateTask)="onUpdateTask($event)"
                 (deleteTask)="onDeleteTask($event)"
-                (selectCategory)="onSelectCategory($event)"
+                (selectCategory)="selectCategory($event)"
 
                 [selectedCategory]="selectedCategory"
                 (filterByStatus)="onFilterTasksByStatus($event)"

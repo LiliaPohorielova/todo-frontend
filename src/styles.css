@@ -57,3 +57,49 @@ app-header {
 .ng-sidebar {
   box-shadow: 0 0 13px rgba(0, 0, 0, 0.4);
 }
+
+
+
+@-webkit-keyframes glowing {
+  0% {
+    -webkit-box-shadow: 0 0 3px rgba(38, 40, 32, 0);
+  }
+  100% {
+    -webkit-box-shadow: 0 0 3px #1e1d16;
+  }
+}
+
+@-moz-keyframes glowing {
+  0% {
+    -moz-box-shadow: 0 0 3px rgba(38, 40, 32, 0);
+  }
+  100% {
+    -moz-box-shadow: 0 0 3px #1e1d16;
+  }
+}
+
+@-o-keyframes glowing {
+  0% {
+    box-shadow: 0 0 3px rgba(38, 40, 32, 0);
+  }
+  100% {
+    box-shadow: 0 0 3px #1e1d16;
+  }
+}
+
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 3px rgba(38, 40, 32, 0);
+  }
+  100% {
+    box-shadow: 0 0 3px #1e1d16;
+  }
+}
+
+
+.blink-button {
+  -webkit-animation: glowing 700ms infinite;
+  -moz-animation: glowing 700ms infinite;
+  -o-animation: glowing 700ms infinite;
+  animation: glowing 700ms infinite;
+}

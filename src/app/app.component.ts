@@ -5,6 +5,8 @@ import {Priority} from "./model/Priority";
 import {concatMap, count, map, zip} from 'rxjs';
 import {IntroService} from "./service/intro.service";
 import {DeviceDetectorService} from "ngx-device-detector";
+import {CategorySearchValues} from "./data/dao/search/SearchObjects";
+import {CategoryService} from "./data/dao/impl/CategoryService";
 
 @Component({
   selector: 'app-root',
@@ -15,7 +17,6 @@ import {DeviceDetectorService} from "ngx-device-detector";
 export class AppComponent implements OnInit {
 
   // Tasks And Categories
-  title = 'Todo';
   tasks: Task[];
   categories: Category[];
   priorities: Priority[];
@@ -48,8 +49,19 @@ export class AppComponent implements OnInit {
   isMobile: boolean;
   isTablet: boolean;
 
+  // статистика
+  uncompletedCountForCategoryAll: number;
+
+  // показать/скрыть статистику
+  showStat = true;
+
+  // параметры поисков
+  categorySearchValues = new CategorySearchValues(); // экземпляр можно создать тут же, т.к. не загружаем из cookies
+
+
   // Внедряем зависимости через конструктор
   constructor(
+    private categoryService: CategoryService,
     private introService: IntroService,
     private deviceService: DeviceDetectorService
   ) {
@@ -66,9 +78,9 @@ export class AppComponent implements OnInit {
     // this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
     // this.dataHandler.getAllPriorities().subscribe(priorities => this.priorities = priorities);
 
-    this.fillCategories(); // заполнить меню с категориями
+    this.fillAllCategories(); // заполнить меню с категориями
 
-    this.onSelectCategory(null); // показать все задачи
+    this.selectCategory(null); // показать все задачи
 
     if (!this.isMobile && !this.isTablet)
       this.introService.startIntroJs(true);
@@ -76,58 +88,51 @@ export class AppComponent implements OnInit {
 
   /* Categories */
 
-  onAddCategory(title: string) {
-    // this.dataHandler.addCategory(title).subscribe(
-    //   () => {
-    //     this.fillCategories()
-    //   }
-    // );
+  // добавление категории
+  addCategory(category: Category) {
+    this.categoryService.create(category).subscribe(result => {
+
+      }
+    );
   }
 
-  onUpdateCategory(category: Category) {
-    // this.dataHandler.updateCategory(category).subscribe(() => {
-    //   this.onSearchCategory(this.searchCategoryText);
-    // });
+  // удаление категории
+  deleteCategory(category: Category) {
+    this.categoryService.delete(category.id).subscribe(cat => {
+
+    });
   }
 
-  // Заполняем категории (ключ - наши категории, значения - кол-во невыполненных задач)
-  fillCategories() {
-    // if (this.categoryMap) {
-    //   this.categoryMap.clear(); // предварительно очищаем
-    // }
-    //
-    // // сортируем категории по алфавиту
-    // this.categories = this.categories.sort((a, b) => a.title.localeCompare(b.title));
-    //
-    // // считаем кол-во невыполненных задач
-    // this.categories.forEach(cat => {
-    //   this.dataHandler.getUncompletedCountInCategory(cat).subscribe(count => this.categoryMap.set(cat, count));
-    // })
+  // обновлении категории
+  updateCategory(category: Category) {
+    this.categoryService.update(category).subscribe(() => {
+
+    });
   }
 
-  onDeleteCategory(category: Category) {
-    // this.dataHandler.deleteCategory(category.id).subscribe(cat => {
-    //   this.selectedCategory = null; // Открываем категорию "Все"
-    //   this.categoryMap.delete(cat);
-    //   this.onSearchCategory(this.searchCategoryText);
-    //   this.updateTasks();
-    // });
+
+  // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
+  fillAllCategories() {
+
+    this.categoryService.findAll().subscribe(result => {
+      this.categories = result;
+    });
+
+
   }
 
-  onSearchCategory(title: string) {
-    // this.searchCategoryText = title;
-    // this.dataHandler.searchCategories(title).subscribe(
-    //   categories => {
-    //     this.categories = categories;
-    //     this.fillCategories();
-    //   }
-    // );
+  // поиск категории
+  searchCategory(categorySearchValues: CategorySearchValues) {
+    this.categoryService.findCategories(categorySearchValues).subscribe(result => {
+      this.categories = result;
+    });
   }
 
-  // Попадаем из дочернего компонента в родительский
-  onSelectCategory(category: Category) {
-    this.selectedCategory = category;
-    this.updateTasksAndStat();
+
+  // изменение категории
+  selectCategory(category: Category): void {
+
+
   }
 
 
