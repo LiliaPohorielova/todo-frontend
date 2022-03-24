@@ -1,8 +1,8 @@
 import {Priority} from "./Priority";
 import {Category} from "./Category";
+import {BaseModel} from "./BaseModel";
 
-export class Task {
-  id: number;
+export class Task extends BaseModel {
   title: string;
   completed: boolean;
   priority?: Priority;
@@ -10,7 +10,7 @@ export class Task {
   date?: Date;
 
   constructor(id: number, title: string, completed: boolean, priority?: Priority, category?: Category, date?: Date) {
-    this.id = id;
+    super(id);
     this.title = title;
     this.completed = completed;
     this.priority = priority;
