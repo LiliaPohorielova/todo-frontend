@@ -13,7 +13,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 export class EditPriorityDialogComponent implements OnInit {
 
   dialogTitle: string; // текст для диалогового окна
-  priorityTitle: string; // текст для названия приоритета (при реактировании или добавлении)
+  priorityTitle: string; // текст для названия приоритета (при редактировании или добавлении)
   operationType: OperationType;
 
   constructor(

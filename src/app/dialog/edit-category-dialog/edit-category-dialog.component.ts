@@ -1,7 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {DataHandlerService} from "../../service/data-handler.service";
-import {Category} from "../../model/Category";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 import {OperationType} from "../OperationType";
 
@@ -19,8 +17,6 @@ export class EditCategoryDialogComponent implements OnInit {
     // Внедряем данные, которые получаем из родительского компонента
     @Inject(MAT_DIALOG_DATA)
     private data: [string, string, OperationType], // Данные, которые передали в диалоговое окно
-
-    private dataHandler: DataHandlerService, // Ссылка на сервис для работы с данными
     private dialog: MatDialog // Для открытия нового диалогового окна из текущего (Желаете подтвердить? -Да, -Нет)
   ) { }
 

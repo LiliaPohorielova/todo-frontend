@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DataHandlerService} from "../../service/data-handler.service";
 import {Category} from "../../model/Category";
 import {ConfirmDialogComponent} from "../../dialog/confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -55,7 +54,6 @@ export class CategoriesComponent implements OnInit {
 
   //Dependency Injection With Constructor
   constructor(
-    private dataHandler: DataHandlerService, // Доступ к данным
     private dialog: MatDialog, // Работа с диалоговым окном
     private deviceDetector: DeviceDetectorService
   ) {

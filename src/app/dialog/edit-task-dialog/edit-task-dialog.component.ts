@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {Task} from "../../model/Task";
-import {DataHandlerService} from "../../service/data-handler.service";
 import {Category} from "../../model/Category";
 import {Priority} from "../../model/Priority";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
@@ -34,8 +33,6 @@ export class EditTaskDialogComponent implements OnInit {
     // Внедряем данные, которые получаем из родительского компонента
     @Inject(MAT_DIALOG_DATA)
     private data: [Task, string, OperationType], // Данные, которые передали в диалоговое окно
-
-    private dataHandler: DataHandlerService, // Ссылка на сервис для работы с данными
     private dialog: MatDialog, // Для открытия нового диалогового окна из текущего (Желаете подтвердить? -Да, -Нет)
     private deviceService: DeviceDetectorService // для определения типа устройства
   ) {
@@ -67,8 +64,8 @@ export class EditTaskDialogComponent implements OnInit {
     this.tmpPriority = this.task.priority; // Приоритет, который был раньше
     this.tmpDate = this.task.date; // Дата, которая была раньше
 
-    this.dataHandler.getAllCategories().subscribe(items => this.categories = items);
-    this.dataHandler.getAllPriorities().subscribe(prior => this.priorities = prior);
+    // this.dataHandler.getAllCategories().subscribe(items => this.categories = items);
+    // this.dataHandler.getAllPriorities().subscribe(prior => this.priorities = prior);
   }
 
   // Подтверждаем изменения
