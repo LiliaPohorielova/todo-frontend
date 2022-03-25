@@ -3,6 +3,8 @@ import {Category} from '../../model/Category';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {MatDialog} from '@angular/material/dialog';
 import {CategorySearchValues} from "../../data/dao/search/SearchObjects";
+import {EditCategoryDialogComponent} from "../../dialog/edit-category-dialog/edit-category-dialog.component";
+import {DialogAction} from "../../object/DialogResult";
 
 @Component({
   selector: 'app-categories',
@@ -10,14 +12,14 @@ import {CategorySearchValues} from "../../data/dao/search/SearchObjects";
   styleUrls: ['./categories.component.css']
 })
 
-// "presentational component": отображает полученные данные и отправляет какие-либо действия обработчику
+// "presentational (dump) component": отображает полученные данные и отправляет какие-либо действия обработчику
 // назначение - работа с категориями
-// класс не видит dataHandler, т.к. напрямую с ним не должен работать
+// класс не видит данные, т.к. напрямую с ними не должен работать
 export class CategoriesComponent implements OnInit {
 
   // компонент взаимодействует с "внешним миром" только через @Input() и @Output !!!
 
-  // принцип инкпсуляции и "слабой связи"
+  // принцип инкапсуляции и "слабой связи"
   // (Low Coupling) из GRASP —
   // General Responsibility Assignment Software Patterns (основные шаблоны распределения обязанностей в программном обеспечении)
   // с помощью @Output() сигнализируем о том, что произошло событие выбора категории (кто будет это обрабатывать - компонент не знает)
@@ -26,7 +28,7 @@ export class CategoriesComponent implements OnInit {
   // ----------------------- входящие параметры ----------------------------
 
   // сеттеры используются для доп. функционала - чтобы при изменении значения вызывать нужные методы
-  // а так можно использовать и обычные переменныые
+  // а так можно использовать и обычные переменные
 
   // выбранная категория для отображения
 
@@ -93,7 +95,7 @@ export class CategoriesComponent implements OnInit {
   // кол-во незавершенных задач для категории Все (для остальных категорий статис-ка подгружаются вместе с самой категорией)
   uncompletedCountForCategoryAll: number;
 
-  filterTitle: string;
+  filterTitle: string; // searchTitle
 
   filterChanged: boolean; // были ли изменения в параметре поиска
 
@@ -110,28 +112,55 @@ export class CategoriesComponent implements OnInit {
 
   // диалоговое окно для добавления категории
   openAddDialog() {
+    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
+      // передаем новый пустой объект для заполнения
+      data: [new Category(null, ''), 'Add new category'],
+      width: '400px'
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) { // если просто закрыли диалоговое окно, ничего не указав
+        return;
+      }
+      if (result.action === DialogAction.SAVE) {
+        this.addCategory.emit(result.obj as Category);
+      }
+    });
   }
 
 
   // диалоговое окно для редактирования категории
   openEditDialog(category: Category) {
+    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
+      // передаем новый пустой объект для заполнения
+      data: [new Category(category.id, category.title), 'Edit category'],
+      width: '400px'
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) { // если просто закрыли диалоговое окно, ничего не указав
+        return;
+      }
+      if (result.action === DialogAction.DELETE) {
+        this.deleteCategory.emit(category);
+        return;
+      }
+      if (result.action === DialogAction.SAVE) {
+        this.updateCategory.emit(result.obj as Category);
+        return;
+      }
+    });
   }
 
 
   // поиск категории
   search() {
-
     this.filterChanged = false; // сбросить
-
     if (!this.categorySearchValues) { // если объект с параметрами поиска непустой
       return;
     }
-
     this.categorySearchValues.title = this.filterTitle;
     this.searchCategory.emit(this.categorySearchValues);
-
   }
 
 
@@ -156,14 +185,10 @@ export class CategoriesComponent implements OnInit {
 
   // проверяет, были ли изменены какие-либо параметры поиска (по сравнению со старым значением)
   checkFilterChanged() {
-
     this.filterChanged = false;
-
     if (this.filterTitle !== this.categorySearchValues.title){
       this.filterChanged = true;
     }
-
     return this.filterChanged;
-
   }
 }

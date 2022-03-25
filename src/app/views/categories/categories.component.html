@@ -3,7 +3,7 @@
     <span class="nav-title">
       Categories
     </span>
-    <!--    иконка добавления новой категории -->
+    <!-- New Category -->
     <span class="add-icon-area">
       <button mat-icon-button (click)="openAddDialog()" class="add-icon">
           <mat-icon>add</mat-icon>
@@ -16,7 +16,7 @@
   <div class="sidebar-wrapper">
     <ul class="nav">
       <div class="search-category-area">
-        <mat-form-field class="example-full-width" style="width: 210px">
+        <mat-form-field class="example-full-width">
           <input
             matInput
             maxlength="256"
@@ -26,6 +26,7 @@
             (ngModelChange)="this.checkFilterChanged()"
 
             (keydown.escape)="clearAndSearch()"
+            (keydown.enter)="search()"
           />
 
           <button
@@ -62,7 +63,7 @@
       <!-- Line -->
       <div class="line"></div>
 
-      <div *ngIf="!categories || categories.length === 0"><p class="not-found">Ничего не найдено</p></div>
+      <div *ngIf="!categories || categories.length === 0"><p class="not-found">Nothing found</p></div>
 
       <!-- Some Categories -->
       <li

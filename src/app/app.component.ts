@@ -90,35 +90,34 @@ export class AppComponent implements OnInit {
 
   // добавление категории
   addCategory(category: Category) {
-    this.categoryService.create(category).subscribe(result => {
-
+    this.categoryService.create(category).subscribe(() => {
+        // если вызов сервиса завершился успешно - добавляем новую категорию в локальный массив categories
+        this.searchCategory(this.categorySearchValues);
       }
     );
   }
 
   // удаление категории
   deleteCategory(category: Category) {
-    this.categoryService.delete(category.id).subscribe(cat => {
-
+    this.categoryService.delete(category.id).subscribe(() => {
+      // когда придет результат - обновим все категории в поиске
+      this.searchCategory(this.categorySearchValues);
     });
   }
 
   // обновлении категории
   updateCategory(category: Category) {
     this.categoryService.update(category).subscribe(() => {
-
+      this.searchCategory(this.categorySearchValues);
     });
   }
 
 
   // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
   fillAllCategories() {
-
     this.categoryService.findAll().subscribe(result => {
       this.categories = result;
     });
-
-
   }
 
   // поиск категории

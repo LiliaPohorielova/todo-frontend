@@ -7,7 +7,7 @@
   <mat-form-field style="width: 100%">
     <mat-label>Enter title</mat-label>
 
-    <!-- Двустронее связывание:  [(ngModel)] -->
+    <!-- Двустороннее связывание:  [(ngModel)] -->
     <!-- Сначала отображаются данные, которые уже были -->
     <!-- Потом считываются и сохраняются новые данные, которые пользователь ввел -->
     <input
@@ -15,13 +15,13 @@
       matInput
       required
       placeholder="Some category"
-      [(ngModel)]="categoryTitle"
+      [(ngModel)]="category.title"
       (keydown.enter)="onConfirm()"> <!-- По нажатию на Enter - сохранить задачу -->
 
     <button
-      *ngIf="categoryTitle.trim().length > 0"
+      *ngIf="category.title.trim().length > 0"
       mat-button matSuffix mat-icon-button aria-label="Clear"
-      (click)="categoryTitle = ''" class="dialog-todo-title">
+      (click)="category.title = ''" class="dialog-todo-title">
       <mat-icon>clear</mat-icon>
     </button>
   </mat-form-field>
@@ -46,7 +46,7 @@
     <!-- Удалить задачу -->
     <button
       mat-button
-      *ngIf="canBeDeleted()"
+      *ngIf="canDelete"
       (click)="delete()"
       class="red">
       Delete category

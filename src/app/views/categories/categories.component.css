@@ -1,78 +1,51 @@
-.pointer {
-  cursor: pointer;
-}
 
-.edit-category-icon-area {
-  width: 15%;
-  display: inline-block;
-  text-align: left;
-  font-size: 13px;
-}
-
-.category-title {
-  width: 70%;
-  display: inline-block;
-  font-size: 15px;
-}
-
-.all-category-title {
-  width: 85%;
-  display: inline-block;
-  font-size: 16px;
-}
-
-.edit-category-icon {
-  color: #dadada;
-}
-
-.add-icon {
-  cursor: pointer;
-  font-size: 25px;
-  vertical-align: middle;
-}
 
 span.add-icon-area {
   width: 20%;
   display: inline-block;
   text-align: left;
+  vertical-align: center;
+  padding: 0!important;
 }
 
-#categories {
-  width: 100%;
-  overflow-x: hidden; /* чтобы не было горизонтальной прокрутки */
+add-icon {
+  cursor: pointer;
+  font-size: 25px;
+  vertical-align: center;
+  padding: 0!important;
 }
+
 
 .nav-title {
   width: 80%;
   display: inline-block;
   font-size: 20px;
   text-align: center;
-  vertical-align: middle;
-}
-
-.my-simple-text {
-  text-transform: uppercase;
-  padding: 5px 0px;
-  display: inline-block;
-  font-size: 18px;
-  color: #3C4858;
-  white-space: nowrap;
-  font-weight: 400;
-  line-height: 30px;
-  overflow: hidden;
-  text-align: center;
+  vertical-align: middle
 }
 
 .search-category-area {
-  padding-left: 17px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #f2f2f2;
+  border-radius: 6px
 }
 
-.sidebar-background {
-  background-image: url(../../../assets/img/sidebar-1.jpg) !important;
+.search-category-button {
+  margin-left: 10px;
+  font-size: 25px
 }
 
-.sidebar-wrapper .mat-form-field {
-  padding-bottom: 0;
+
+.category-title {
+  width: 70%;
+  display: inline-block;
+  font-size: 16px;
+}
+
+
+.edit-category-icon {
+  color: #dadada;
 }
 
 .uncompleted-count {
@@ -83,4 +56,105 @@ span.add-icon-area {
   width: 15%;
   display: inline-block;
   text-align: center;
+}
+
+
+.title, .category {
+  cursor: pointer;
+}
+
+.mat-form-field-wrapper {
+  width: 100%;
+}
+
+.sidebar-wrapper .mat-form-field {
+  padding-bottom: 0px;
+}
+
+
+.sidebar a {
+  font-size: 16px !important;
+}
+
+span.add-icon-area {
+  width: 15%;
+  display: inline-block;
+  text-align: left;
+  padding: 0!important;
+  vertical-align: center;
+}
+
+
+.nav-title {
+  width: 80%;
+  display: inline-block;
+  font-size: 20px;
+  text-align: center;
+  vertical-align: middle
+}
+
+.search-category-area {
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 3px;
+  background-color: #f2f2f2;
+  border-radius: 6px
+}
+
+.search-category-button {
+  margin-left: 10px;
+  font-size: 25px
+}
+
+.all-category-title {
+  width: 85%;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.edit-category-icon-area {
+  width: 15%;
+  display: inline-block;
+  text-align: left;
+  font-size: 13px
+}
+
+.edit-category-icon {
+  color: #dadada;
+}
+
+.uncompleted-count {
+  background-color: #eaeaea;
+  border-radius: 3px;
+  padding: 5px;
+  color: black;
+  width: 15%;
+  display: inline-block;
+  text-align: center;
+}
+
+
+.sidebar-background {
+  background-image: url(../../../assets/img/sidebar-1.jpg) !important;
+}
+
+
+.sidebar-wrapper .mat-form-field {
+  padding-bottom: 0px;
+}
+
+
+.color-circle {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 30px;
+  border: 1px solid #dadada;
+
+}
+
+#categories {
+  width: 100%;
+  overflow-x: hidden; /* чтобы не было гориз. прокрутки */
 }
