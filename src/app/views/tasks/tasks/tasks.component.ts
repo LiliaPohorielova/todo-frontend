@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Task} from "../../../model/Task";
 import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatDialog} from '@angular/material/dialog';
 import {EditTaskDialogComponent} from "../../../dialog/edit-task-dialog/edit-task-dialog.component";
@@ -33,7 +33,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   deleteTask = new EventEmitter<Task>();
 
   @Output()
-  selectCategory = new EventEmitter<Category>(); // Нажали на кегорию из общей таблицы задач
+  selectCategory = new EventEmitter<Category>(); // Нажали на категорию из общей таблицы задач
 
   @Output()
   filterByTitle = new EventEmitter<string>();
@@ -43,6 +43,10 @@ export class TasksComponent implements OnInit, AfterViewInit {
 
   @Output()
   filterByPriority = new EventEmitter<Priority>();
+
+  @Output()
+  paging = new EventEmitter<PageEvent>(); // переход по страницам данных
+
 
   tasks: Task[];
   priorities: Priority[];
@@ -55,6 +59,9 @@ export class TasksComponent implements OnInit, AfterViewInit {
   isMobile: boolean
 
   taskSearchValues: TaskSearchValues;
+
+  @Input()
+  totalTasksFounded: number; // сколько всего задач найдено
 
   // все возможные параметры для поиска задач
   @Input('taskSearchValues')
@@ -69,7 +76,7 @@ export class TasksComponent implements OnInit, AfterViewInit {
   @Input('tasks')
   public set setTasks(tasks: Task[]) {
     this.tasks = tasks;
-    this.fillTable();
+    this.assignTableSource();
   }
 
   @Input('priorities')
@@ -252,5 +259,14 @@ export class TasksComponent implements OnInit, AfterViewInit {
       return task.priority.color;
     }
     return 'none';
+  }
+
+  private assignTableSource() {
+    if (!this.dataSource) return;
+    this.dataSource.data = this.tasks;
+  }
+
+  pageChanged(pageEvent: PageEvent) {
+    this.paging.emit(pageEvent);
   }
 }

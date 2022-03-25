@@ -8,6 +8,7 @@ import {DeviceDetectorService} from "ngx-device-detector";
 import {CategorySearchValues, TaskSearchValues} from "./data/dao/search/SearchObjects";
 import {CategoryService} from "./data/dao/impl/CategoryService";
 import {TaskService} from "./data/dao/impl/TaskService";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-root',
@@ -204,6 +205,7 @@ export class AppComponent implements OnInit {
   searchTasks(searchTaskValues: TaskSearchValues) {
     this.taskSearchValues = searchTaskValues;
     this.taskService.searchTask(this.taskSearchValues).subscribe(result => {
+      this.totalTasksFounded = result.totalElements;
       this.tasks = result.content; // массив задач
     });
   }
@@ -267,5 +269,21 @@ export class AppComponent implements OnInit {
   // показать скрыть меню
   toggleMenu() {
     this.menuOpened = !this.menuOpened;
+  }
+
+  // изменили кол-во элементов на странице или перешли на другую страницу
+  // с помощью paginator
+  paging(pageEvent: PageEvent) {
+
+    // если изменили настройку "кол-во на странице" - заново делаем запрос и показываем с 1й страницы
+    if (this.taskSearchValues.pageSize !== pageEvent.pageSize) {
+      this.taskSearchValues.pageNumber = 0; // новые данные будем показывать с 1-й страницы (индекс 0)
+    } else {
+      // если просто перешли на другую страницу
+      this.taskSearchValues.pageNumber = pageEvent.pageIndex;
+    }
+    this.taskSearchValues.pageSize = pageEvent.pageSize;
+    this.taskSearchValues.pageNumber = pageEvent.pageIndex;
+    this.searchTasks(this.taskSearchValues); // показываем новые данные
   }
 }
