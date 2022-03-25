@@ -21,10 +21,10 @@ export class TaskService extends BaseService<Task> implements TaskDAO {
     private baseUrl,
     private http: HttpClient) { // библиотека, которая позволяет преобразовывать объект из JSON и обратно
     // выполняет HTTP-запросы get, put, post, delete
-    super(baseUrl, http)
+    super(baseUrl, http);
   }
 
   searchTask(taskSearchValues: TaskSearchValues): Observable<any> {
-    return this.http.post<Task[]>(this.baseUrl + '/search', TaskSearchValues);
+    return this.http.post<any>(this.baseUrl + '/search', taskSearchValues);
   }
 }

@@ -53,7 +53,9 @@
       </div>
 
       <!-- All Categories -->
-      <li class="nav-item category" [class.active]="selectedCategory === null">
+      <li class="nav-item category"
+          [class.active]="selectedCategory === null"
+          (click)="showCategory(null)">
         <a class="nav-link">
           <span class="all-category-title">All Categories</span>
           <span class="uncompleted-count"> {{uncompletedCountForCategoryAll || 0}}</span>

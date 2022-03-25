@@ -5,8 +5,9 @@ import {Priority} from "./model/Priority";
 import {concatMap, count, map, zip} from 'rxjs';
 import {IntroService} from "./service/intro.service";
 import {DeviceDetectorService} from "ngx-device-detector";
-import {CategorySearchValues} from "./data/dao/search/SearchObjects";
+import {CategorySearchValues, TaskSearchValues} from "./data/dao/search/SearchObjects";
 import {CategoryService} from "./data/dao/impl/CategoryService";
+import {TaskService} from "./data/dao/impl/TaskService";
 
 @Component({
   selector: 'app-root',
@@ -17,11 +18,12 @@ import {CategoryService} from "./data/dao/impl/CategoryService";
 export class AppComponent implements OnInit {
 
   // Tasks And Categories
+  title = "Todo";
   tasks: Task[];
   categories: Category[];
   priorities: Priority[];
   selectedCategory: Category = null;
-  categoryMap = new Map<Category, number>();
+  totalTasksFounded: number;
 
   // Search
   searchTaskText = '';
@@ -57,11 +59,13 @@ export class AppComponent implements OnInit {
 
   // параметры поисков
   categorySearchValues = new CategorySearchValues(); // экземпляр можно создать тут же, т.к. не загружаем из cookies
+  taskSearchValues = new TaskSearchValues();
 
 
   // Внедряем зависимости через конструктор
   constructor(
     private categoryService: CategoryService,
+    private taskService: TaskService,
     private introService: IntroService,
     private deviceService: DeviceDetectorService
   ) {
@@ -130,8 +134,12 @@ export class AppComponent implements OnInit {
 
   // изменение категории
   selectCategory(category: Category): void {
-
-
+    this.selectedCategory = category;
+    this.taskSearchValues.categoryId = category ? category.id : null;
+    this.searchTasks(this.taskSearchValues);
+    if (this.isMobile) {
+      this.menuOpened = false; // для телефонов - автоматически скрываем боковое меню
+    }
   }
 
 
@@ -193,9 +201,11 @@ export class AppComponent implements OnInit {
 
 
   // Поиск задач по названию
-  onSearchTasks(searchString: string) {
-    this.searchTaskText = searchString;
-    this.updateTasks();
+  searchTasks(searchTaskValues: TaskSearchValues) {
+    this.taskSearchValues = searchTaskValues;
+    this.taskService.searchTask(this.taskSearchValues).subscribe(result => {
+      this.tasks = result.content; // массив задач
+    });
   }
 
   onFilterTasksByStatus(status: boolean) {

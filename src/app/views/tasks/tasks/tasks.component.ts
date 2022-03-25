@@ -10,6 +10,7 @@ import {Category} from "../../../model/Category";
 import {Priority} from "../../../model/Priority";
 import {OperationType} from "../../../dialog/OperationType";
 import {DeviceDetectorService} from "ngx-device-detector";
+import {TaskSearchValues} from "../../../data/dao/search/SearchObjects";
 
 @Component({
   selector: 'app-tasks',
@@ -51,7 +52,15 @@ export class TasksComponent implements OnInit, AfterViewInit {
   selectedStatusFilter: boolean = null;   // по-умолчанию будут показываться все задачи
   selectedPriorityFilter: Priority = null;
 
-  isMobile: boolean;
+  isMobile: boolean
+
+  taskSearchValues: TaskSearchValues;
+
+  // все возможные параметры для поиска задач
+  @Input('taskSearchValues')
+  set setTaskSearchValues(taskSearchValues: TaskSearchValues) {
+    this.taskSearchValues = taskSearchValues;
+  }
 
   @Input()
   selectedCategory: Category;
