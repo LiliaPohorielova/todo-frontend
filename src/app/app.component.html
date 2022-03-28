@@ -77,14 +77,21 @@
           <!-- Intro Instructions -->
           <div class="row">
             <div class="col-12">
-              <!-- Tasks -->
+
               <app-tasks
 
+                [totalTasksFounded]="totalTasksFounded"
                 [tasks]="tasks"
                 [taskSearchValues]="taskSearchValues"
-                [totalTasksFounded]="totalTasksFounded"
 
+
+                (searchAction)="searchTasks($event)"
+                (selectCategory)="selectCategory($event)"
                 (paging)="paging($event)"
+
+                (addTask)="onAddTask($event)"
+                (deleteTask)="onDeleteTask($event)"
+                (updateTask)="onUpdateTask($event)"
               >
               </app-tasks>
 

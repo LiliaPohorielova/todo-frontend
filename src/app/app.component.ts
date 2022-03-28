@@ -2,13 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {Task} from "./model/Task";
 import {Category} from "./model/Category";
 import {Priority} from "./model/Priority";
-import {concatMap, count, map, zip} from 'rxjs';
+import {concatMap, count, map, Observable, zip} from 'rxjs';
 import {IntroService} from "./service/intro.service";
 import {DeviceDetectorService} from "ngx-device-detector";
 import {CategorySearchValues, TaskSearchValues} from "./data/dao/search/SearchObjects";
 import {CategoryService} from "./data/dao/impl/CategoryService";
 import {TaskService} from "./data/dao/impl/TaskService";
 import {PageEvent} from "@angular/material/paginator";
+import {PriorityService} from "./data/dao/impl/PriorityService";
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
   // Search
   searchTaskText = '';
   searchCategoryText = '';
+  showSearch: boolean;  // показать/скрыть поиск
 
   // Filters
   statusFilter: boolean;
@@ -67,6 +69,7 @@ export class AppComponent implements OnInit {
   constructor(
     private categoryService: CategoryService,
     private taskService: TaskService,
+    private priorityService: PriorityService,
     private introService: IntroService,
     private deviceService: DeviceDetectorService
   ) {
@@ -80,15 +83,17 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.dataHandler.getAllCategories().subscribe(categories => this.categories = categories);
-    // this.dataHandler.getAllPriorities().subscribe(priorities => this.priorities = priorities);
-
-    this.fillAllCategories(); // заполнить меню с категориями
-
-    this.selectCategory(null); // показать все задачи
-
-    if (!this.isMobile && !this.isTablet)
-      this.introService.startIntroJs(true);
+    if (!this.isMobile && !this.isTablet) {
+      // this.introService.startIntroJs(true);
+    }
+    this.fillAllCategories().subscribe(res => {
+      this.categories = res;
+      // первоначальное отображение задач при загрузке приложения
+      // запускаем только после выполнения статистики (т.к. понадобятся ее данные) и загруженных категорий
+      this.selectCategory(this.selectedCategory);
+    });
+    // заполнить приоритеты
+    this.fillAllPriorities();
   }
 
   /* Categories */
@@ -105,25 +110,27 @@ export class AppComponent implements OnInit {
   // удаление категории
   deleteCategory(category: Category) {
     this.categoryService.delete(category.id).subscribe(() => {
+      this.selectedCategory = null; // выбираем категорию "Все"
       // когда придет результат - обновим все категории в поиске
       this.searchCategory(this.categorySearchValues);
+      this.selectCategory(this.selectedCategory);
     });
   }
 
   // обновлении категории
   updateCategory(category: Category) {
     this.categoryService.update(category).subscribe(() => {
-      this.searchCategory(this.categorySearchValues);
+      this.searchCategory(this.categorySearchValues); // обновляем список категорий
+      this.searchTasks(this.taskSearchValues); // обновляем список задач
     });
   }
 
 
   // заполняет категории и кол-во невыполненных задач по каждой из них (нужно для отображения категорий)
-  fillAllCategories() {
-    this.categoryService.findAll().subscribe(result => {
-      this.categories = result;
-    });
+  fillAllCategories(): Observable<Category[]> {
+    return this.categoryService.findAll();
   }
+
 
   // поиск категории
   searchCategory(categorySearchValues: CategorySearchValues) {
@@ -201,12 +208,13 @@ export class AppComponent implements OnInit {
   }
 
 
-  // Поиск задач по названию
+  // Поиск задач
   searchTasks(searchTaskValues: TaskSearchValues) {
     this.taskSearchValues = searchTaskValues;
     this.taskService.searchTask(this.taskSearchValues).subscribe(result => {
       this.totalTasksFounded = result.totalElements;
       this.tasks = result.content; // массив задач
+      console.log(this.tasks);
     });
   }
 
@@ -218,6 +226,15 @@ export class AppComponent implements OnInit {
   onFilterTasksByPriority(priority: Priority) {
     this.priorityFilter = priority;
     this.updateTasksAndStat();
+  }
+
+  /* Priorities */
+
+  // заполняет массив приоритетов
+  fillAllPriorities() {
+    this.priorityService.findAll().subscribe(result => {
+      this.priorities = result;
+    });
   }
 
 
@@ -285,5 +302,10 @@ export class AppComponent implements OnInit {
     this.taskSearchValues.pageSize = pageEvent.pageSize;
     this.taskSearchValues.pageNumber = pageEvent.pageIndex;
     this.searchTasks(this.taskSearchValues); // показываем новые данные
+  }
+
+  // показать-скрыть поиск
+  toggleSearch(showSearch: boolean) {
+    this.showSearch = showSearch;
   }
 }
