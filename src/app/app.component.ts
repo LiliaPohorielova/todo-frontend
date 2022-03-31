@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Task} from "./model/Task";
 import {Category} from "./model/Category";
 import {Priority} from "./model/Priority";
-import {concatMap, count, map, Observable, zip} from 'rxjs';
+import {Observable} from 'rxjs';
 import {IntroService} from "./service/intro.service";
 import {DeviceDetectorService} from "ngx-device-detector";
 import {CategorySearchValues, TaskSearchValues} from "./data/dao/search/SearchObjects";
@@ -10,6 +10,7 @@ import {CategoryService} from "./data/dao/impl/CategoryService";
 import {TaskService} from "./data/dao/impl/TaskService";
 import {PageEvent} from "@angular/material/paginator";
 import {PriorityService} from "./data/dao/impl/PriorityService";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-root',
@@ -67,9 +68,10 @@ export class AppComponent implements OnInit {
 
   // Внедряем зависимости через конструктор
   constructor(
-    private categoryService: CategoryService,
     private taskService: TaskService,
+    private categoryService: CategoryService,
     private priorityService: PriorityService,
+    private dialog: MatDialog, // работа с диалог. окнами
     private introService: IntroService,
     private deviceService: DeviceDetectorService
   ) {
@@ -78,14 +80,17 @@ export class AppComponent implements OnInit {
     this.isTablet = deviceService.isTablet();
 
     this.showStatistic = !this.isMobile;
+    this.showSearch = !this.isMobile;
 
     this.setMenuValues();
   }
 
   ngOnInit() {
+    // для мобильных и планшетов - не показывать интро
     if (!this.isMobile && !this.isTablet) {
       // this.introService.startIntroJs(true);
     }
+    // заполнить категории
     this.fillAllCategories().subscribe(res => {
       this.categories = res;
       // первоначальное отображение задач при загрузке приложения
@@ -142,6 +147,8 @@ export class AppComponent implements OnInit {
 
   // изменение категории
   selectCategory(category: Category): void {
+    // сбрасываем, чтобы показывать результат с первой страницы
+    this.taskSearchValues.pageNumber = 0;
     this.selectedCategory = category;
     this.taskSearchValues.categoryId = category ? category.id : null;
     this.searchTasks(this.taskSearchValues);
@@ -153,29 +160,16 @@ export class AppComponent implements OnInit {
 
   /* Tasks */
 
-  onAddTask(task: Task) {
-    // this.dataHandler.addTask(task).pipe( //сначала добавляем задачу
-    //   concatMap(task => { // используем добавленный task (concatMap - для последовательного
-    //       // .. и считаем кол-во задач в категории с учетом новой (только что добавленной задачи)
-    //       return this.dataHandler.getUncompletedCountInCategory(task.category).pipe(map(count => {
-    //         return ({t: task, count}); // получили массив с добавленной задачей
-    //       }));
-    //     }
-    //   )).subscribe(result => {
-    //   const t = result.t as Task;
-    //
-    //   if (t.category) {
-    //     this.categoryMap.set(t.category, result.count);
-    //   }
-    //   this.updateTasksAndStat();
-    // });
+  addTask(task: Task) {
+    this.taskService.create(task).subscribe(() => {
+      this.searchTasks(this.taskSearchValues); // обновляем список задач
+    });
   }
 
-  onUpdateTask(task: Task) {
-    // this.dataHandler.updateTask(task).subscribe(() => {
-    //   this.fillCategories();
-    //   this.updateTasksAndStat();
-    // });
+  updateTask(task: Task) {
+    this.taskService.update(task).subscribe(() => {
+      this.searchTasks(this.taskSearchValues); // обновляем список задач
+    });
   }
 
   updateTasks() {
@@ -190,21 +184,9 @@ export class AppComponent implements OnInit {
   }
 
   onDeleteTask(task: Task) {
-    // // сначала удаляем задачу, ждем (пока не удалиться - ничего дальше не выполнять), потом смотрим сколько невыполненных осталось
-    // this.dataHandler.deleteTask(task.id).pipe(
-    //   // pipe() - позволяет последовательно выполнить две операции Observable
-    //   concatMap(t => { // используем добавленный task (concatMap - для последовательного
-    //       return this.dataHandler.getUncompletedCountInCategory(t.category).pipe(map(count => {
-    //         return ({t, count}); // получили мапу с ключом и значением
-    //       }));
-    //     }
-    //   )).subscribe(result => {
-    //
-    //   const t = result.t as Task;
-    //   this.categoryMap.set(t.category, result.count);
-    //
-    //   this.updateTasksAndStat();
-    // });
+    this.taskService.delete(task.id).subscribe(() => {
+      this.searchTasks(this.taskSearchValues); // обновляем список задач
+    });
   }
 
 
@@ -212,9 +194,15 @@ export class AppComponent implements OnInit {
   searchTasks(searchTaskValues: TaskSearchValues) {
     this.taskSearchValues = searchTaskValues;
     this.taskService.searchTask(this.taskSearchValues).subscribe(result => {
-      this.totalTasksFounded = result.totalElements;
+      // Если выбранная страница для отображения больше, чем всего страниц - заново делаем поиск и показываем 1ю страницу.
+      // Если пользователь был например на 2й странице общего списка и выполнил новый поиск, в результате которого доступна только 1 страница,
+      // то нужно вызвать поиск заново с показом 1й страницы (индекс 0)
+      if (result.totalPages > 0 && this.taskSearchValues.pageNumber >= result.totalPages) {
+        this.taskSearchValues.pageNumber = 0;
+        this.searchTasks(this.taskSearchValues);
+      }
+      this.totalTasksFounded = result.totalElements; // сколько данных показывать на странице
       this.tasks = result.content; // массив задач
-      console.log(this.tasks);
     });
   }
 
@@ -264,10 +252,6 @@ export class AppComponent implements OnInit {
     this.showStatistic = showStatistic;
   }
 
-  onClosedMenu() {
-    this.menuOpened = false;
-  }
-
   // параметры меню
   setMenuValues() {
     this.menuPosition = 'left';
@@ -288,10 +272,15 @@ export class AppComponent implements OnInit {
     this.menuOpened = !this.menuOpened;
   }
 
+  // если закрыли меню любым способом - ставим значение false
+  onClosedMenu() {
+    this.menuOpened = false;
+  }
+
+
   // изменили кол-во элементов на странице или перешли на другую страницу
   // с помощью paginator
   paging(pageEvent: PageEvent) {
-
     // если изменили настройку "кол-во на странице" - заново делаем запрос и показываем с 1й страницы
     if (this.taskSearchValues.pageSize !== pageEvent.pageSize) {
       this.taskSearchValues.pageNumber = 0; // новые данные будем показывать с 1-й страницы (индекс 0)

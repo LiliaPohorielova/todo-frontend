@@ -20,7 +20,6 @@
          data-step="1"
          data-intro="Filter tasks by category. You can add/edit/delete a category"
          data-position="right"
-
     >
 
       <app-categories
@@ -79,19 +78,22 @@
             <div class="col-12">
 
               <app-tasks
-
+                [showSearch]="showSearch"
                 [totalTasksFounded]="totalTasksFounded"
                 [tasks]="tasks"
+                [priorities]="priorities"
+                [categories]="categories"
+                [selectedCategory]="selectedCategory"
                 [taskSearchValues]="taskSearchValues"
 
-
                 (searchAction)="searchTasks($event)"
+                (toggleSearch)="toggleSearch($event)"
                 (selectCategory)="selectCategory($event)"
                 (paging)="paging($event)"
 
-                (addTask)="onAddTask($event)"
+                (addTask)="addTask($event)"
                 (deleteTask)="onDeleteTask($event)"
-                (updateTask)="onUpdateTask($event)"
+                (updateTask)="updateTask($event)"
               >
               </app-tasks>
 
@@ -101,7 +103,7 @@
       </div>
 
       <!-- Footer -->
-      <app-footer></app-footer>
+      <app-footer *ngIf="!isMobile"></app-footer>
 
     </div>
   </div>

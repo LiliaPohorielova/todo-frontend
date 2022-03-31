@@ -172,6 +172,34 @@ div.card-mobile p {
   margin-bottom: 0 !important;
 }
 
+div.card-mobile p {
+  margin-bottom: 0 !important;
+}
+
 .nopadding-left {
   padding-left: 0;
+}
+
+.padding-top-20 {
+  padding-top: 10px;
+}
+
+.nowidth {
+  width: 100%;
+}
+
+.search-icon {
+  background: linear-gradient(60deg, #ffa726, #fb8c00);
+}
+
+.padding-top-mobile {
+  padding-top: 15px;
+}
+
+.padding-left-mobile {
+  padding-left: 15px;
+}
+
+.text-align-mobile {
+  text-align: justify;
 }
