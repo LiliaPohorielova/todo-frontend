@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
-import {OperationType} from "../OperationType";
 import {Category} from "../../model/Category";
 import {DialogAction, DialogResult} from "../../object/DialogResult";
 

@@ -48,9 +48,11 @@
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <app-header
           [categoryName]="selectedCategory ? selectedCategory.title : 'All tasks'"
+          [isShow]="showStat"
+
           (toggleStatistic)="toggleStatistic($event)"
           (toggleMenu)="toggleMenu()"
-          [isShow]="showStat"
+          (settingsChanged)="settingsChanged($event)"
         ></app-header>
       </nav>
 

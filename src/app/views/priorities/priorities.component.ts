@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Priority} from "../../model/Priority";
 import {MatDialog} from "@angular/material/dialog";
-import {OperationType} from "../../dialog/OperationType";
 import {ConfirmDialogComponent} from "../../dialog/confirm-dialog/confirm-dialog.component";
 import {EditPriorityDialogComponent} from "../../dialog/edit-priority-dialog/edit-priority-dialog.component";
 import {EditCategoryDialogComponent} from "../../dialog/edit-category-dialog/edit-category-dialog.component";
+import {DialogAction} from "../../object/DialogResult";
 
 @Component({
   selector: 'app-priorities',
@@ -31,39 +31,48 @@ export class PrioritiesComponent implements OnInit {
 
   ngOnInit(): void {  }
 
-  onAddPriority(): void {
-    const dialogRef = this.dialog.open(EditCategoryDialogComponent, {
-      data: ['', 'Add priority', OperationType.ADD],
+  // диалоговое окно для добавления
+  openAddDialog(): void {
+    const dialogRef = this.dialog.open(EditPriorityDialogComponent, {
+      data: [new Priority(null, '', PrioritiesComponent.defaultColor), 'Add priority'],
       width: '400px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const newPriority = new Priority(null, result as string, PrioritiesComponent.defaultColor);
+      if (!(result)) { // если просто закрыли окно, ничего не нажав
+        return;
+      }
+      if (result.action === DialogAction.SAVE) {
+        const newPriority = result.obj as Priority;
         this.addPriority.emit(newPriority);
       }
     });
   }
 
   // Диалоговое окно для редактирования приоритетов
-  onEditPriority(priority: Priority) {
-    const dialogRef = this.dialog.open(EditPriorityDialogComponent, {data: [priority.title, "Edit priority", OperationType.EDIT], autoFocus: false});
+  openEditDialog(priority: Priority) {
+    const dialogRef = this.dialog.open(EditPriorityDialogComponent, {
+      // передаем копию объекта, чтобы все изменения не касались оригинала (чтобы их можно было отменить)
+      data: [new Priority(priority.id, priority.title, priority.color), 'Edit priority']
+    });
+
     dialogRef.afterClosed().subscribe(result => {
-      // Обработка результата (то, что нам пришло после закрытия диалогового окна)
-      if (result === 'delete') { // Удаляем
+      if (!(result)) { // если просто закрыли окно, ничего не нажав
+        return;
+      }
+      if (result.action === DialogAction.DELETE) {
         this.deletePriority.emit(priority);
         return;
       }
-
-      if (result) { // Если есть результат - преобразовываем его в Priority
-        priority.title = result as string;
+      if (result.action === DialogAction.SAVE) {
+        priority = result.obj as Priority; // получить отредактированный объект
         this.updatePriority.emit(priority);
         return;
       }
     });
   }
 
-  delete(priority: Priority) {
+  openDeleteDialog(priority: Priority) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '500px',
       data: {
@@ -74,8 +83,12 @@ export class PrioritiesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result)
-        this.deletePriority.emit(priority) // Нажали удалить
+      if (!(result)) { // если просто закрыли окно, ничего не нажав
+        return;
+      }
+      if (result.action === DialogAction.OK) {
+        this.deletePriority.emit(priority);
+      }
     });
   }
 }

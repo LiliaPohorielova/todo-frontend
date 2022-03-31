@@ -2,29 +2,40 @@
 <mat-dialog-content>
   <p mat-dialog-title>{{dialogTitle}}</p>
 
-  <mat-form-field style="width: 100%">
-    <mat-label>Enter title (max length 20 symbols)</mat-label>
-    <input
-      #inputTitle
-      (keydown.enter)="onConfirm()" [(ngModel)]="priorityTitle"
-      matInput
-      required
-      maxlength="20"
-    />
+  <div class="row">
+    <div class="col-10">
+      <mat-form-field style="width: 100%">
+        <mat-label>Enter title (max length 20 symbols)</mat-label>
+        <input
+          #inputTitle
+          (keydown.enter)="confirm()" [(ngModel)]="priority.title"
+          matInput
+          required
+          maxlength="20"
+        />
 
-    <button
-      (click)="priorityTitle= ''"
-      *ngIf="priorityTitle.trim().length > 0"
-      aria-label="Clear"
-      class="clear-icon size25"
-      mat-button
-      mat-icon-button
-      matSuffix
-    >
-      <mat-icon>clear</mat-icon>
-    </button>
+        <button
+          (click)="priority.title = ''"
+          *ngIf="priority && priority.title.trim().length > 0"
+          aria-label="Clear"
+          class="clear-icon size25"
+          mat-button
+          mat-icon-button
+          matSuffix
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
 
-  </mat-form-field>
+
+      </mat-form-field>
+    </div>
+    <div class="col-2">
+      <span [(colorPicker)]="priority.color"
+        [style.background]="priority.color"
+        class="color-circle"></span>
+    </div>
+  </div>
+
 </mat-dialog-content>
 
 
@@ -32,7 +43,7 @@
 <mat-dialog-actions>
   <div>
     <button
-      (click)="onConfirm()"
+      (click)="confirm()"
       [disabled]="inputTitle.value.trim().length==0"
       class="purple"
       mat-raised-button
@@ -40,10 +51,10 @@
       Save
     </button>
 
-    <button (click)="onCancel()" mat-raised-button>Cancel</button>
+    <button (click)="cancel()" mat-raised-button>Cancel</button>
 
     <button (click)="delete()"
-            *ngIf="canDelete()"
+            *ngIf="canDelete"
             class="red"
             mat-button>
       Delete

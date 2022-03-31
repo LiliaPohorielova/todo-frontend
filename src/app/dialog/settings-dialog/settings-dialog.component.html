@@ -4,13 +4,13 @@
 
   <!-- Priority list with colors -->
   <app-priorities
-    (addPriority)="onAddPriority($event)"
-    (deletePriority)="onDeletePriority($event)"
-    (updatePriority)="onUpdatePriority($event)"
+    (addPriority)="addPriority($event)"
+    (deletePriority)="deletePriority($event)"
+    (updatePriority)="updatePriority($event)"
     [priorities]="priorities"
   ></app-priorities>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-raised-button class="purple" (click)="onClose()">Close</button>
+  <button mat-raised-button class="purple" (click)="close()">Close</button>
 </mat-dialog-actions>
