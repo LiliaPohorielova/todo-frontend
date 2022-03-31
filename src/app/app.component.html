@@ -50,7 +50,7 @@
           [categoryName]="selectedCategory ? selectedCategory.title : 'All tasks'"
           (toggleStatistic)="toggleStatistic($event)"
           (toggleMenu)="toggleMenu()"
-          [isShow]="showStatistic"
+          [isShow]="showStat"
         ></app-header>
       </nav>
 
@@ -65,10 +65,9 @@
 
             <!-- Statistic -->
             <app-statistic
-              [totalTasksInCategory]="totalTasksCountInCategory"
-              [completeTasksInCategory]="completedCountInCategory"
-              [uncompletedTasksInCategory]="uncompletedCountInCategory"
-              [showStatistic]="showStatistic">
+              [dash]="dash"
+              [showStat]="showStat"
+            >
             </app-statistic>
 
           </div>

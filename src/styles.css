@@ -24,7 +24,10 @@ body {
 
 .mat-form-field {
   width: 100%;
-  padding-right: 15px;
+}
+
+.find-category {
+  padding-right: 15px!important;
 }
 
 .purple {

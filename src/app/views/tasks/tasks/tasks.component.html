@@ -98,34 +98,30 @@
   </div>
 
   <!-- Кнопки -->
-  <div class="col-md-4 col-sm-12"  style="padding-top: 10px">
-    <div class="row">
-      <div class="col-4">
-        <button
-          matSuffix mat-icon-button mat-button
-          aria-label="Sort direction"
-          (click)="$event.stopPropagation(); changedSortDirection(); checkFilterChanged()"
-        >
-          <mat-icon>{{this.sortIconName}}</mat-icon>
-        </button>
-      </div>
-      <div class="col-4">
-        <button [ngClass]="{'search-button': true, 'blink-button': changed}" mat-raised-button color="accent"
-                (click)="initSearch()"
-                class="search-icon">
-          <mat-icon>search</mat-icon>
-        </button>
-      </div>
-      <div class="col-4">
-        <button
-          matSuffix mat-button
-          aria-label="Clear"
-          (click)="$event.stopPropagation(); clearSearchValues(); checkFilterChanged()"
-        >
-          Clear
-        </button>
-      </div>
-    </div>
+  <div class="col-md-4 col-sm-12" [ngClass]="{'sort': !isMobile}" style="padding-top: 10px">
+    <span *ngIf="isMobile">Sort: </span>
+    <button
+      matSuffix mat-icon-button mat-button
+      aria-label="Sort direction"
+      (click)="$event.stopPropagation(); changedSortDirection(); checkFilterChanged()"
+      class="arrow-icon"
+    >
+      <mat-icon>{{this.sortIconName}}</mat-icon>
+    </button>
+
+
+    <button [ngClass]="{'search-button': true, 'blink-button': changed}" mat-raised-button color="accent"
+            (click)="initSearch()"
+            class="search-icon">
+      <mat-icon>search</mat-icon>
+    </button>
+    <button
+      matSuffix mat-button
+      aria-label="Clear"
+      (click)="$event.stopPropagation(); clearSearchValues(); checkFilterChanged()"
+    >
+      Clear
+    </button>
   </div>
 </div>
 

@@ -190,6 +190,11 @@ div.card-mobile p {
 
 .search-icon {
   background: linear-gradient(60deg, #ffa726, #fb8c00);
+  margin-right: 30px;
+}
+
+.arrow-icon {
+  margin-right: 30px;
 }
 
 .padding-top-mobile {

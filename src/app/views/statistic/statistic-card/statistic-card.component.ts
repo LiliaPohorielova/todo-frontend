@@ -17,7 +17,7 @@ export class StatisticCardComponent implements OnInit {
   count1: any;
 
   @Input()
-  countTotal: any;
+  count2: any;
 
   @Input()
   title: string;
