@@ -35,11 +35,12 @@ import {ColorPickerModule} from "ngx-color-picker";
 import {SettingsDialogComponent} from './dialog/settings-dialog/settings-dialog.component';
 import {EditPriorityDialogComponent} from './dialog/edit-priority-dialog/edit-priority-dialog.component';
 import {SidebarModule} from "ng-sidebar";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {CATEGORY_URL_TOKEN} from "./data/dao/impl/CategoryService";
 import {TASK_URL_TOKEN} from "./data/dao/impl/TaskService";
 import {PRIORITY_URL_TOKEN} from "./data/dao/impl/PriorityService";
 import {STATISTIC_URL_TOKEN} from "./data/dao/impl/StatisticService";
+import {CustomHttpInterceptor} from "./interceptor/http-interceptor";
 
 registerLocaleData(localeRu);
 
@@ -84,6 +85,11 @@ registerLocaleData(localeRu);
     HttpClientModule
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomHttpInterceptor,
+      multi: true
+    },
     {
       provide: CATEGORY_URL_TOKEN,
       useValue: 'http://localhost:8080/category'

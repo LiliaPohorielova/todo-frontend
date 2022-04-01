@@ -15,6 +15,7 @@ import {DashboardData} from "./object/DashboardData";
 import {Statistic} from "./model/Statistic";
 import {StatisticService} from "./data/dao/impl/StatisticService";
 import {CookiesUtils} from "./utils/CookiesUtils";
+import {SpinnerService} from "./service/spinner.service";
 
 @Component({
   selector: 'app-root',
@@ -34,18 +35,10 @@ export class AppComponent implements OnInit {
 
   // Search
   searchTaskText = '';
-  searchCategoryText = '';
   showSearch = true;  // показать/скрыть поиск
-
-  // Filters
-  statusFilter: boolean;
-  priorityFilter: Priority;
 
   // Statistic
   totalTasksCountInCategory: number;
-  completedCountInCategory: number;
-  uncompletedCountInCategory: number;
-  uncompletedTotalTasksCount: number;
 
   // Menu
   menuOpened: boolean;
@@ -57,21 +50,21 @@ export class AppComponent implements OnInit {
   isMobile: boolean;
   isTablet: boolean;
 
-  // статистика
+  // Statistic
   uncompletedCountForCategoryAll: number;
-
-  // показать/скрыть статистику
-  showStat = true;
+  showStat = true; // показать/скрыть статистику
   stat: Statistic; // данные общей статистики
   dash: DashboardData = new DashboardData(); // данные для дашбоарда
 
-  // параметры поисков
+  // Search Parameters
   categorySearchValues = new CategorySearchValues(); // экземпляр можно создать тут же, т.к. не загружаем из cookies
   taskSearchValues: TaskSearchValues;
 
-
   // Cookies
   cookiesUtils = new CookiesUtils();
+
+  // Spinner
+  spinner: SpinnerService;
 
   readonly cookieTaskSearchValues = 'todo:searchValues';
   readonly cookieShowStat = 'todo:showStat';
@@ -88,8 +81,11 @@ export class AppComponent implements OnInit {
     private dialog: MatDialog, // работа с диалог. окнами
     private statService: StatisticService,
     private introService: IntroService,
-    private deviceService: DeviceDetectorService
+    private deviceService: DeviceDetectorService,
+    private spinnerService: SpinnerService
   ) {
+    this.spinner = spinnerService;
+
     this.statService.getStatistic().subscribe((result => {     // сначала получаем данные статистики
       this.stat = result;
       this.uncompletedCountForCategoryAll = this.stat.uncompletedTotal;
@@ -102,7 +98,11 @@ export class AppComponent implements OnInit {
           this.taskSearchValues.pageSize = this.defaultPageSize;
           this.taskSearchValues.pageNumber = this.defaultPageNumber;
         }
-        this.initShowStatCookie();
+        if (this.isMobile) {
+          this.showStat = false; // для мобильных устройств никогда не показываем статистику
+        } else {
+          this.initShowStatCookie();
+        }
         this.initShowSearchCookie();
         // первоначальное отображение задач при загрузке приложения
         // запускаем только после выполнения статистики (т.к. понадобятся ее данные) и загруженных категорий
@@ -223,17 +223,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  updateTasks() {
-    // this.dataHandler.searchTasks(
-    //   this.selectedCategory,
-    //   this.searchTaskText,
-    //   this.statusFilter,
-    //   this.priorityFilter,
-    // ).subscribe((tasks: Task[]) => {
-    //   this.tasks = tasks;
-    // });
-  }
-
   onDeleteTask(task: Task) {
     this.taskService.delete(task.id).subscribe(() => {
       if (task.category) { // если в удаленной задаче была указана категория
@@ -243,7 +232,6 @@ export class AppComponent implements OnInit {
       this.searchTasks(this.taskSearchValues); // обновляем список задач
     });
   }
-
 
   // Поиск задач
   searchTasks(searchTaskValues: TaskSearchValues) {
@@ -260,16 +248,6 @@ export class AppComponent implements OnInit {
       this.totalTasksFounded = result.totalElements; // сколько данных показывать на странице
       this.tasks = result.content; // массив задач
     });
-  }
-
-  onFilterTasksByStatus(status: boolean) {
-    this.statusFilter = status;
-    this.updateTasksAndStat();
-  }
-
-  onFilterTasksByPriority(priority: Priority) {
-    this.priorityFilter = priority;
-    this.updateTasksAndStat();
   }
 
   /* Priorities */
@@ -314,26 +292,6 @@ export class AppComponent implements OnInit {
     if (this.selectedCategory && this.selectedCategory.id === cat.id) { // если выбрана та категория, где сейчас работаем
       this.fillDashData(cat.completedCount, cat.uncompletedCount); // заполнить дашборд данными статистики из категории
     }
-  }
-
-  updateTasksAndStat() {
-    this.updateTasks(); //обновить список задач
-    this.updateStat(); //обновить статистику
-  }
-
-  updateStat() {
-    // zip( //Делает запрос на 4 переменные, ждет результатов, собирает всё в одном subscribe
-    //   this.dataHandler.getTotalCountInCategory(this.selectedCategory),
-    //   this.dataHandler.getCompletedCountInCategory(this.selectedCategory),
-    //   this.dataHandler.getUncompletedCountInCategory(this.selectedCategory),
-    //   this.dataHandler.getUncompletedTotalCount())
-    //
-    //   .subscribe(array => {
-    //     this.totalTasksCountInCategory = array[0];
-    //     this.completedCountInCategory = array[1];
-    //     this.uncompletedCountInCategory = array[2];
-    //     this.uncompletedTotalTasksCount = array[3];
-    //   });
   }
 
   toggleStatistic(showStatistic: boolean) {
