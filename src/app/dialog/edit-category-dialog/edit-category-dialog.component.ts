@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 import {Category} from "../../model/Category";
 import {DialogAction, DialogResult} from "../../object/DialogResult";
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-edit-category-dialog',
@@ -19,7 +20,7 @@ export class EditCategoryDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     private data: [Category, string], // Данные, которые передали в диалоговое окно
     private dialog: MatDialog // Для открытия нового диалогового окна из текущего (Желаете подтвердить? -Да, -Нет)
-  ) { }
+  ) {  }
 
   private dialogTitle: string; // Заголовок окна
   category: Category; // Категория

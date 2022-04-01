@@ -30,7 +30,7 @@
 
 <mat-dialog-actions>
 
-  <div>
+  <div style="text-align: center">
     <!-- Сохранить изменения -->
     <button
       mat-raised-button
@@ -39,16 +39,15 @@
       class="purple"> <!-- Если пустое название - кнопка сохранить неактивная! -->
       Save
     </button>
-
     <!-- Отменить изменения (Закрыть) -->
     <button (click)="onCancel()" mat-raised-button>Close</button>
-
     <!-- Удалить задачу -->
     <button
       mat-button
       *ngIf="canDelete"
       (click)="delete()"
-      class="red">
+      class="red"
+    >
       Delete category
     </button>
   </div>

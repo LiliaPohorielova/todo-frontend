@@ -14,6 +14,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {DashboardData} from "./object/DashboardData";
 import {Statistic} from "./model/Statistic";
 import {StatisticService} from "./data/dao/impl/StatisticService";
+import {CookiesUtils} from "./utils/CookiesUtils";
 
 @Component({
   selector: 'app-root',
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
   // Search
   searchTaskText = '';
   searchCategoryText = '';
-  showSearch: boolean;  // показать/скрыть поиск
+  showSearch = true;  // показать/скрыть поиск
 
   // Filters
   statusFilter: boolean;
@@ -66,8 +67,18 @@ export class AppComponent implements OnInit {
 
   // параметры поисков
   categorySearchValues = new CategorySearchValues(); // экземпляр можно создать тут же, т.к. не загружаем из cookies
-  taskSearchValues = new TaskSearchValues();
+  taskSearchValues: TaskSearchValues;
 
+
+  // Cookies
+  cookiesUtils = new CookiesUtils();
+
+  readonly cookieTaskSearchValues = 'todo:searchValues';
+  readonly cookieShowStat = 'todo:showStat';
+  readonly cookieShowSearch = 'todo:showSearch';
+
+  readonly defaultPageSize = 10;
+  readonly defaultPageNumber = 0;
 
   // Внедряем зависимости через конструктор
   constructor(
@@ -85,6 +96,14 @@ export class AppComponent implements OnInit {
       // заполнить категории
       this.fillAllCategories().subscribe(res => {
         this.categories = res;
+        //пытаемся восстановить cookies, если они были ранее
+        if (!this.initSearchCookies()) {
+          this.taskSearchValues = new TaskSearchValues();
+          this.taskSearchValues.pageSize = this.defaultPageSize;
+          this.taskSearchValues.pageNumber = this.defaultPageNumber;
+        }
+        this.initShowStatCookie();
+        this.initShowSearchCookie();
         // первоначальное отображение задач при загрузке приложения
         // запускаем только после выполнения статистики (т.к. понадобятся ее данные) и загруженных категорий
         this.selectCategory(this.selectedCategory);
@@ -229,6 +248,7 @@ export class AppComponent implements OnInit {
   // Поиск задач
   searchTasks(searchTaskValues: TaskSearchValues) {
     this.taskSearchValues = searchTaskValues;
+    this.cookiesUtils.setCookie(this.cookieTaskSearchValues, JSON.stringify(this.taskSearchValues));
     this.taskService.searchTask(this.taskSearchValues).subscribe(result => {
       // Если выбранная страница для отображения больше, чем всего страниц - заново делаем поиск и показываем 1ю страницу.
       // Если пользователь был например на 2й странице общего списка и выполнил новый поиск, в результате которого доступна только 1 страница,
@@ -318,6 +338,7 @@ export class AppComponent implements OnInit {
 
   toggleStatistic(showStatistic: boolean) {
     this.showStat = showStatistic;
+    this.cookiesUtils.setCookie(this.cookieShowStat, String(showStatistic));
   }
 
   // параметры меню
@@ -364,6 +385,7 @@ export class AppComponent implements OnInit {
   // показать-скрыть поиск
   toggleSearch(showSearch: boolean) {
     this.showSearch = showSearch;
+    this.cookiesUtils.setCookie(this.cookieShowStat, String(showSearch));
   }
 
   getCategoryIndex(category: Category): number {
@@ -375,5 +397,61 @@ export class AppComponent implements OnInit {
     // this.fillAllPriorities(); // заново загрузить все категории из БД (чтобы их можно было сразу использовать в задачах)
     this.priorities = priorities; // получаем измененные массив с приоритетами
     this.searchTasks(this.taskSearchValues); // обновить текущие задачи и категории для отображения
+  }
+
+  initSearchCookies(): boolean {
+    const cookie = this.cookiesUtils.getCookie(this.cookieTaskSearchValues);
+    if (!cookie) return false; // cookie not found
+    const cookieJSON = JSON.parse(cookie);
+    if (!cookieJSON) return false; // cookie not found
+    if (!this.taskSearchValues) {
+      this.taskSearchValues = new TaskSearchValues();
+    }
+    const tmpPageSize = cookieJSON.pageSize;
+    if (tmpPageSize) {
+      this.taskSearchValues.pageSize = Number(tmpPageSize);
+    }
+    const tmpCategoryId = cookieJSON.categoryId;
+    if (tmpCategoryId) {
+      this.taskSearchValues.categoryId = Number(tmpCategoryId);
+      this.selectedCategory = this.getCategoryFromArray(tmpCategoryId);
+    }
+    const tmpPriorityId = cookieJSON.priorityId;
+    if (tmpPriorityId) {
+      this.taskSearchValues.priorityId = Number(tmpPriorityId);
+    }
+    const tmpTitle = cookieJSON.title;
+    if (tmpTitle) {
+      this.taskSearchValues.title = tmpTitle;
+    }
+    const tmpCompleted = cookieJSON.completed;
+    if (tmpCompleted) {
+      this.taskSearchValues.completed = tmpCompleted;
+    }
+    const tmpSortColumn = cookieJSON.sortColumn;
+    if (tmpSortColumn) {
+      this.taskSearchValues.sortColumn = tmpSortColumn;
+    }
+    const tmpSortDirection = cookieJSON.sortDirection;
+    if (tmpSortDirection) {
+      this.taskSearchValues.sortDirection = tmpSortDirection;
+    }
+    return true; // кук был найден и загружен
+  }
+
+  getCategoryFromArray(id: number): Category {
+    return this.categories.find(t => t.id === id);
+  }
+
+  private initShowSearchCookie() {
+    const val = this.cookiesUtils.getCookie(this.cookieShowSearch);
+    if (val) this.showSearch = val === 'true';
+  }
+
+  private initShowStatCookie() {
+    if (!this.isMobile) {
+      const val = this.cookiesUtils.getCookie(this.cookieShowStat);
+      if (val) this.showStat = val === 'true';
+    }
   }
 }
